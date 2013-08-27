@@ -21,5 +21,5 @@ Options
 ---
 
     -h, --help: Print the help and exit
-    -o=filename, --output=filename: Set the filename of the markdown output
-    -b=filename, --bibfile=filename: Set the filename of the BibTeX input
+    -o filename, --output=filename: Set the filename of the markdown output
+    -b filename, --bibfile=filename: Set the filename of the BibTeX input
