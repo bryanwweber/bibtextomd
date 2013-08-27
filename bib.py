@@ -111,7 +111,6 @@ def reorder(names):
         #of the items in the list of first names. Take the first 
         #element of each item and append a period, but no space.
         #
-        print(firsts)
         initials = ''
         for item in firsts:
             initials = initials + item[0] + '.'
@@ -123,7 +122,7 @@ def reorder(names):
     #Find the case of the website author and set the format for that
     #name
     #
-    i = tidynames.index('B.W. Weber')
+    i = tidynames.index('F.A. Author')
     tidynames[i] = myNameFormatTag + tidynames[i] + myNameFormatTag
     #
     #Handle the various cases of number of authors and how they should
