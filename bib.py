@@ -8,11 +8,13 @@
 #work.
 #
 #v. 0.1.0 - initial release
+#v. 0.1.1 - Fix escape character bug in annote field. Add help output
+#           with option -h. 14-OCT-2013
 #######################################################################
 #
 #We need the BibTeX parser from the bibtexparser package on PyPI. If
 #pip is installed, `pip install bibtexparser` will install the package.
-#Code is tested with version 0.3, may not work with other versions.
+#Code is tested with version 0.4, may not work with other versions.
 #
 from bibtexparser.bparser import BibTexParser
 from datetime import datetime
@@ -151,16 +153,21 @@ def main(argv):
     bibFileName = 'refs.bib'
     outputFileName = 'pubs.md'
     try:
-        opts, args = getopt.getopt(argv, "hf:o:", 
+        opts, args = getopt.getopt(argv, "hb:o:", 
                                    ["help", "bibfile=", "output="])
     except getopt.GetoptError:
         print("You did not enter an option properly. Please try again.")
         sys.exit(2)
     for opt, arg in opts:
         if opt in ("-h", "--help"):
-            print("I need to write the help file still. Sorry!")
+            print("Usage:\n\
+                   -h,--help: Print this help dialog and exit\n\
+                   -b filename,--bibfile='filename': Set the filename of the\
+                   BibTeX reference file\n\
+                   -o filename,--output='filename': Set the filename of the\
+                   kramdown output")
             sys.exit()
-        elif opt in ("-f", "--bibfile"):
+        elif opt in ("-b", "--bibfile"):
             bibFileName = arg
         elif opt in ("-o", "--output"):
             outputFileName = arg
@@ -297,8 +304,8 @@ def main(argv):
             #this field with the tag "annote" in BibTeX.
             #
             if "annote" in ref:
-                string = (string + openSpan + ref["annote"] + closeSpan +
-                          '{:.comment}  \n'
+                string = (string + openSpan + ref["annote"].replace('\\','') +
+                           closeSpan + '{:.comment}  \n'
                          )
             print(string)
             outFile.write(string)
@@ -367,8 +374,8 @@ def main(argv):
             #this field with the tag "annote" in BibTeX.
             #            
             if "annote" in ref:
-                string = (string + openSpan + ref["annote"] + closeSpan +
-                          '{:.comment}  \n'
+                string = (string + openSpan + ref["annote"].replace('\\','') +
+                          closeSpan + '{:.comment}  \n'
                          )
             print(string)
             outFile.write(string)
@@ -401,8 +408,8 @@ def main(argv):
             string = string + year + closeSpan + '{:.journal}  \n'
 
             if "annote" in ref:
-                string = (string + openSpan + ref["annote"] + closeSpan +
-                          '{:.comment}  \n'
+                string = (string + openSpan + ref["annote"].replace('\\','') + 
+                          closeSpan + '{:.comment}  \n'
                          )
             print(string)
             outFile.write(string)
