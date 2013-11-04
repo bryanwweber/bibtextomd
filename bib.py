@@ -5,11 +5,13 @@
 #is intended to be included in a file to be processed by Jekyll. The
 #BibTeX file is expected to be from Mendeley, although Mendeley follows
 #the standard conventions pretty well, so most BibTeX files should 
-#work.
+#work. bibtexparser is Python 3 ONLY!
 #
 #v. 0.1.0 - initial release
 #v. 0.1.1 - Fix escape character bug in annote field. Add help output
 #           with option -h. 14-OCT-2013
+#v. 0.2.0 - Add option to specify highlighted author name on the 
+#           command line input, -a. 04-NOV-2013
 #######################################################################
 #
 #We need the BibTeX parser from the bibtexparser package on PyPI. If
@@ -25,7 +27,7 @@ import sys, getopt
 #since this task will be the same for every paper type. The current
 #format is "F.M. Last, F.M. Last, and F.M. Last".
 #
-def reorder(names):
+def reorder(names, faname='F.A. Author'):
     """Format the string of author names and return a string.
     
     Adapated from one of the `customization` functions in 
@@ -35,6 +37,9 @@ def reorder(names):
              formatted in the style "Last, First Middle and Last, First
              Middle and Last, First Middle" and this is the expected
              style here.
+    faname -- string of the initialized name of the author to whom 
+              formatting will be applied
+              default: 'F.A. Author' 
     OUTPUT:
     nameout -- string of formatted names.
     
@@ -124,8 +129,11 @@ def reorder(names):
     #Find the case of the website author and set the format for that
     #name
     #
-    i = tidynames.index('F.A. Author')
-    tidynames[i] = myNameFormatTag + tidynames[i] + myNameFormatTag
+    try:
+        i = tidynames.index(faname)
+        tidynames[i] = myNameFormatTag + tidynames[i] + myNameFormatTag
+    except ValueError:
+        print("Couldn't find ",faname,"in the names list. Sorry!")
     #
     #Handle the various cases of number of authors and how they should
     #be joined. Convert the elements of `tidynames` to a string.
@@ -152,25 +160,31 @@ def reorder(names):
 def main(argv):
     bibFileName = 'refs.bib'
     outputFileName = 'pubs.md'
+    faname = 'F.A. Author'
     try:
-        opts, args = getopt.getopt(argv, "hb:o:", 
-                                   ["help", "bibfile=", "output="])
+        opts, args = getopt.getopt(argv, "hb:o:a:", 
+                                   ["help", "bibfile=", "output=", 
+                                   "author="])
     except getopt.GetoptError:
         print("You did not enter an option properly. Please try again.")
         sys.exit(2)
     for opt, arg in opts:
         if opt in ("-h", "--help"):
             print("Usage:\n\
-                   -h,--help: Print this help dialog and exit\n\
-                   -b filename,--bibfile='filename': Set the filename of the\
-                   BibTeX reference file\n\
-                   -o filename,--output='filename': Set the filename of the\
-                   kramdown output")
+    -h, --help: Print this help dialog and exit\n\
+    -b filename, --bibfile=filename: Set the filename of the\
+BibTeX reference file. Default: refs.bib\n\
+    -o filename, --output=filename: Set the filename of the\
+kramdown output. Default: pubs.md\n\
+    -a 'author', --author='f.a. name': Set the name of the author\
+to be highlighted. Default: 'F.A. Author'")
             sys.exit()
         elif opt in ("-b", "--bibfile"):
             bibFileName = arg
         elif opt in ("-o", "--output"):
             outputFileName = arg
+        elif opt in ("-a", "--author"):
+            faname = arg
     #
     #Set the formatting identifiers. Since we're using kramdown, we
     #don't have to use the HTML tags.
@@ -246,7 +260,7 @@ def main(argv):
             #'Energy & Fuels' because Mendeley inserts an extra '\'
             #into the BibTeX.
             #
-            authors = reorder(ref["author"])
+            authors = reorder(ref["author"],faname)
             title = ref["title"]
             journal = ref["journal"]
             if '\&' in journal:
@@ -323,7 +337,7 @@ def main(argv):
         #Loop through the references in the `inproceedings` type.
         #
         for ref in sortDict["inproceedings"]:
-            authors = reorder(ref["author"])
+            authors = reorder(ref["author"],faname)
             title = ref["title"]
             conf = ref["booktitle"]
             year = ref["year"]
@@ -387,7 +401,7 @@ def main(argv):
         outFile.write("\nMaster's Thesis\n---\n")
         pubyear = '2200'
         for ref in sortDict["phdthesis"]:
-            authors = reorder(ref["author"])
+            authors = reorder(ref["author"],faname)
             title = ref["title"]
             year = ref["year"]
             if year != pubyear:
