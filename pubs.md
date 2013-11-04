@@ -31,5 +31,5 @@ Master's Thesis
 {:.paper}
 <span>The best sources of name generation</span>{:.papertitle}  
 <span>**F.A. Author**</span>{:.authors}  
-University, Aug. 2010</span>{:.journal}  
+<span>University, Aug. 2010</span>{:.journal}  
 <span>Files at the following link</span>{:.comment}  

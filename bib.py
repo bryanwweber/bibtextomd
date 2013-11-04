@@ -12,6 +12,8 @@
 #           with option -h. 14-OCT-2013
 #v. 0.2.0 - Add option to specify highlighted author name on the 
 #           command line input, -a. 04-NOV-2013
+#v. 0.2.1 - Fix bug where no opening span tag was printed on the
+#           university name line for the thesis. 04-NOV-2013
 #######################################################################
 #
 #We need the BibTeX parser from the bibtexparser package on PyPI. If
@@ -412,8 +414,8 @@ to be highlighted. Default: 'F.A. Author'")
                 
             string = ('\n{:.paper}\n' + 
                       openSpan + title + closeSpan + '{:.papertitle}  \n' +
-                      openSpan + authors + closeSpan + '{:.authors}  \n'
-                     )
+                      openSpan + authors + closeSpan + '{:.authors}  \n' + 
+                      openSpan )
             if "school" in ref:
                 string = string + ref["school"] + ', '
             if "month" in ref:
