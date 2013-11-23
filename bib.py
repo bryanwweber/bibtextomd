@@ -1,3 +1,4 @@
+#! /usr/bin/python3
 #######################################################################
 #Bryan W. Weber, 27 Aug. 2013 13:46
 #Take BibTeX bibliography and export citations in the format of my
@@ -14,6 +15,9 @@
 #           command line input, -a. 04-NOV-2013
 #v. 0.2.1 - Fix bug where no opening span tag was printed on the
 #           university name line for the thesis. 04-NOV-2013
+#v. 0.2.2 - Add shebang to the script so that it can be run directly
+#           from the command line - no more `python bib.py` needed,
+#           just `bib.py -options` will do!
 #######################################################################
 #
 #We need the BibTeX parser from the bibtexparser package on PyPI. If
