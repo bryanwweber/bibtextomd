@@ -19,6 +19,9 @@
 #           from the command line - no more `python3 bib.py -options`
 #           needed, just `py bib.py -options` on Windows or `./bib.py 
 #           -options` on Unix type systems will do!
+#v. 0.2.3 - Add better error printing. Define help message in one place
+#           so it can be reused. Change option loopups to sets instead
+#           of what they were before (tuples?).
 #######################################################################
 #
 #We need the BibTeX parser from the bibtexparser package on PyPI. If
@@ -168,29 +171,32 @@ def main(argv):
     bibFileName = 'refs.bib'
     outputFileName = 'pubs.md'
     faname = 'F.A. Author'
-    try:
-        opts, args = getopt.getopt(argv, "hb:o:a:", 
-                                   ["help", "bibfile=", "output=", 
-                                   "author="])
-    except getopt.GetoptError:
-        print("You did not enter an option properly. Please try again.")
-        sys.exit(2)
-    for opt, arg in opts:
-        if opt in ("-h", "--help"):
-            print("Usage:\n\
+    help = "Usage:\n\
     -h, --help: Print this help dialog and exit\n\
     -b filename, --bibfile=filename: Set the filename of the\
 BibTeX reference file. Default: refs.bib\n\
     -o filename, --output=filename: Set the filename of the\
 kramdown output. Default: pubs.md\n\
     -a 'author', --author='f.a. name': Set the name of the author\
-to be highlighted. Default: 'F.A. Author'")
+to be highlighted. Default: 'F.A. Author'"
+    try:
+        opts, args = getopt.getopt(argv, "hb:o:a:", 
+                                   ["help", "bibfile=", "output=", 
+                                   "author="])
+    except getopt.GetoptError as e:
+        print("You did not enter an option properly. Please try again.")
+        print(e)
+        print(help)
+        sys.exit(2)
+    for opt, arg in opts:
+        if opt in {"-h", "--help"}:
+            print(help)
             sys.exit()
-        elif opt in ("-b", "--bibfile"):
+        elif opt in {"-b", "--bibfile"}:
             bibFileName = arg
-        elif opt in ("-o", "--output"):
+        elif opt in {"-o", "--output"}:
             outputFileName = arg
-        elif opt in ("-a", "--author"):
+        elif opt in {"-a", "--author"}:
             faname = arg
     #
     #Set the formatting identifiers. Since we're using kramdown, we
