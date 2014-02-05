@@ -22,6 +22,9 @@
 #v. 0.2.3 - Add better error printing. Define help message in one place
 #           so it can be reused. Change option loopups to sets instead
 #           of what they were before (tuples?).
+#v. 0.2.4 - Add try:except for bibtexparser import to print an error if
+#           bibtexparser is not installed. Change string formatting of
+#           help string. 02-FEB-2014
 #######################################################################
 #
 #We need the BibTeX parser from the bibtexparser package on PyPI. If
