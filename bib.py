@@ -177,14 +177,14 @@ def main(argv):
     bibFileName = 'refs.bib'
     outputFileName = 'pubs.md'
     faname = 'F.A. Author'
-    help = "Usage:\n\
-    -h, --help: Print this help dialog and exit\n\
-    -b filename, --bibfile=filename: Set the filename of the\
-BibTeX reference file. Default: refs.bib\n\
-    -o filename, --output=filename: Set the filename of the\
-kramdown output. Default: pubs.md\n\
-    -a 'author', --author='f.a. name': Set the name of the author\
-to be highlighted. Default: 'F.A. Author'"
+    help = ("Usage:\n"
+    "-h, --help: Print this help dialog and exit\n"
+    "-b filename, --bibfile=filename: Set the filename of the"
+    "BibTeX reference file. Default: refs.bib\n"
+    "-o filename, --output=filename: Set the filename of the"
+    "kramdown output. Default: pubs.md\n"
+    "-a 'author', --author='f.a. name': Set the name of the author"
+    "to be highlighted. Default: 'F.A. Author'")
     try:
         opts, args = getopt.getopt(argv, "hb:o:a:", 
                                    ["help", "bibfile=", "output=", 
