@@ -28,7 +28,13 @@
 #pip is installed, `pip install bibtexparser` will install the package.
 #Code is tested with version 0.4, may not work with other versions.
 #
-from bibtexparser.bparser import BibTexParser
+try:
+    from bibtexparser.bparser import BibTexParser
+except ImportError:
+    print("We need the BibTeX parser from the bibtexparser package on PyPI. "
+          "If pip is installed, `pip install bibtexparser` will install the "
+          "package. Code is tested with version 0.4, may not work with other "
+          "versions.")
 from datetime import datetime
 import sys, getopt
 
