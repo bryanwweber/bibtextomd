@@ -35,7 +35,7 @@ def reorder(names, faname='F.A. Author'):
     """
     # Set the format tag for the website's owner, to highlight where on
     # the author list the website owner is. Default is **
-    myNameFormatTag = '**'
+    my_name_format_tag = '**'
 
     # Convert the input string to a list by splitting the string at the
     # " and " and strip out any remaining whitespace.
@@ -105,7 +105,7 @@ def reorder(names, faname='F.A. Author'):
     # name
     try:
         i = tidynames.index(faname)
-        tidynames[i] = myNameFormatTag + tidynames[i] + myNameFormatTag
+        tidynames[i] = my_name_format_tag + tidynames[i] + my_name_format_tag
     except ValueError:
         print("Couldn't find ",faname,"in the names list. Sorry!")
 
@@ -127,8 +127,8 @@ def reorder(names, faname='F.A. Author'):
     return nameout
 
 def main(argv):
-    bibFileName = 'refs.bib'
-    outputFileName = 'pubs.md'
+    bib_file_name = 'refs.bib'
+    output_file_name = 'pubs.md'
     faname = 'F.A. Author'
     help = ("Usage:\n"
     "-h, --help: Print this help dialog and exit\n"
@@ -146,7 +146,7 @@ def main(argv):
         print("You did not enter an option properly. Please try again.")
         print(e)
         print(help)
-        sys.exit(2)
+        sys.exit(1)
 
     # If the user doesn't input any options, print the help.
     if not opts:
@@ -158,9 +158,9 @@ def main(argv):
             print(help)
             sys.exit()
         elif opt in {"-b", "--bibfile"}:
-            bibFileName = arg
+            bib_file_name = arg
         elif opt in {"-o", "--output"}:
-            outputFileName = arg
+            output_file_name = arg
         elif opt in {"-a", "--author"}:
             faname = arg
 
@@ -173,11 +173,11 @@ def main(argv):
     openSpan = '<span>'
     closeSpan = '</span>'
 
-    # Open and parse the BibTeX file in `bibFileName` using
+    # Open and parse the BibTeX file in `bib_file_name` using
     # `bibtexparser`
 
-    with open(bibFileName,'r') as bibFile:
-        bp = BibTexParser(bibFile)
+    with open(bib_file_name,'r') as bib_file:
+        bp = BibTexParser(bib_file)
 
     # Get a dictionary of dictionaries of key, value pairs from the
     # BibTeX file. The structure is 
@@ -197,22 +197,22 @@ def main(argv):
     # a sorted list for each type of reference. Then we store each of
     # these sorted lists in a dictionary whose key is the type of
     # reference and value is the list of dictionaries.
-    sortDict = {}
+    sort_dict = {}
     for type in types:
         temp = sorted([val for key, val in refsdict.items()
                       if val["type"] == type], key=lambda l:
                       datetime.strptime(l["month"],'%b').month, reverse=True)
-        sortDict[type] = sorted(temp, key=lambda k: k["year"], reverse=True)
+        sort_dict[type] = sorted(temp, key=lambda k: k["year"], reverse=True)
 
     # Open the output file with utf-8 encoding, write mode, and Unix
     # newlines.
-    with open(outputFileName, encoding='utf-8', mode='w',
-              newline='') as outFile:
+    with open(output_file_name, encoding='utf-8', mode='w',
+              newline='') as out_file:
 
         # Start with journal articles. Print the header to the screen
         # and output file.
         print('Journal Articles\n---\n')
-        outFile.write('Journal Articles\n---\n')
+        out_file.write('Journal Articles\n---\n')
 
         # To get the year numbering correct, we have to set a dummy
         # value for pubyear (usage described below).
@@ -224,7 +224,7 @@ def main(argv):
         # information for each reference type. Therefore, its easiest
         # to write out the logic for each loop instead of writing the
         # logic into a function and calling that.
-        for ref in sortDict["article"]:
+        for ref in sort_dict["article"]:
             # Get the string of author names in the proper format from
             # the `reorder` function. Get some other information. Hack
             # the journal title to remove the '\' before '&' in
@@ -247,7 +247,7 @@ def main(argv):
                 pubyear = year
                 stri = '\n{:.year}\n###' + year + '\n'
                 print(stri)
-                outFile.write(stri)
+                out_file.write(stri)
 
             # Start building the string containing the formatted
             # reference. Each bit should be surrounded by a span. The
@@ -289,18 +289,18 @@ def main(argv):
                            closeSpan + '{:.comment}  \n'
                          )
             print(string)
-            outFile.write(string)
+            out_file.write(string)
 
         # Next are conference papers and posters. Print the header to
         # the screen and the output file.
         print('Conference Publications and Posters\n---\n')
-        outFile.write('\nConference Publications and Posters\n---\n')
+        out_file.write('\nConference Publications and Posters\n---\n')
 
         # Same trick for the pubyear as for the journal articles.
         pubyear = ''
 
         # Loop through the references in the `inproceedings` type.
-        for ref in sortDict["inproceedings"]:
+        for ref in sort_dict["inproceedings"]:
             authors = reorder(ref["author"],faname)
             title = ref["title"]
             year = ref["year"]
@@ -308,7 +308,7 @@ def main(argv):
                 pubyear = year
                 stri = '\n{:.year}\n###' + year + '\n'
                 print(stri)
-                outFile.write(stri)
+                out_file.write(stri)
 
             # Start building the reference string.
             string = ('\n{:.paper}\n' +
@@ -352,14 +352,14 @@ def main(argv):
                           closeSpan + '{:.comment}  \n'
                          )
             print(string)
-            outFile.write(string)
+            out_file.write(string)
 
         # Finally are the theses and dissertations. Same general logic
         # as for the other reference types.
         print("Master's Thesis\n---\n")
-        outFile.write("\nMaster's Thesis\n---\n")
+        out_file.write("\nMaster's Thesis\n---\n")
         pubyear = '2200'
-        for ref in sortDict["phdthesis"]:
+        for ref in sort_dict["phdthesis"]:
             authors = reorder(ref["author"],faname)
             title = ref["title"]
             year = ref["year"]
@@ -367,7 +367,7 @@ def main(argv):
                 pubyear = year
                 stri = '\n{:.year}\n###' + year + '\n'
                 print(stri)
-                outFile.write(stri)
+                out_file.write(stri)
 
             string = ('\n{:.paper}\n' +
                       openSpan + title + closeSpan + '{:.papertitle}  \n' +
@@ -385,7 +385,7 @@ def main(argv):
                           closeSpan + '{:.comment}  \n'
                          )
             print(string)
-            outFile.write(string)
+            out_file.write(string)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
