@@ -25,6 +25,9 @@
 #v. 0.2.4 - Add try:except for bibtexparser import to print an error if
 #           bibtexparser is not installed. Change string formatting of
 #           help string. 02-FEB-2014
+#v. 0.2.5 - Fix newlines on Windows - only Unix style \n will be
+#           written now. Print help if no options are specified on the
+#           command line by the user. 14-FEB-2014
 #######################################################################
 #
 #We need the BibTeX parser from the bibtexparser package on PyPI. If
