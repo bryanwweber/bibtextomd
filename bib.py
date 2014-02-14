@@ -197,6 +197,12 @@ def main(argv):
         print(e)
         print(help)
         sys.exit(2)
+        
+    # If the user doesn't input any options, print the help.
+    if not opts:
+        print(help)
+        sys.exit(0)
+        
     for opt, arg in opts:
         if opt in {"-h", "--help"}:
             print(help)
