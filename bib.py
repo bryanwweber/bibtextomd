@@ -167,11 +167,11 @@ def main(argv):
     # Set the formatting identifiers. Since we're using kramdown, we
     # don't have to use the HTML tags.
     em = '_'
-    st = '**'
+    strong = '**'
 
     # Set some HTML tags to go around each part of the reference.
-    openSpan = '<span>'
-    closeSpan = '</span>'
+    open_span = '<span>'
+    close_span = '</span>'
 
     # Open and parse the BibTeX file in `bib_file_name` using
     # `bibtexparser`
@@ -245,9 +245,9 @@ def main(argv):
             year = ref["year"]
             if year != pubyear:
                 pubyear = year
-                stri = '\n{:.year}\n###' + year + '\n'
-                print(stri)
-                out_file.write(stri)
+                write_year = '\n{{:.year}}\n### {}\n'.format(year)
+                print(write_year)
+                out_file.write(write_year)
 
             # Start building the string containing the formatted
             # reference. Each bit should be surrounded by a span. The
@@ -255,41 +255,52 @@ def main(argv):
             # HTML tag. Each line should be ended with two spaces
             # before the newline so that kramdown inserts an HTML <br>
             # there.
-            string = ('\n{:.paper}\n' +
-                      openSpan + title + closeSpan + '{:.papertitle}  \n' +
-                      openSpan + authors + closeSpan + '{:.authors}  \n' +
-                      openSpan + em + journal + em + ', '
-                      )
+            reference = (
+                '\n{{:.paper}}\n{open}{title}{close}{{:.papertitle}}  \n'
+                '{open}{authors}{close}{{:.authors}}  \n'
+                '{open}{em}{journal}{em}, '.format(open=open_span, 
+                close=close_span, title=title, authors=authors, em=em, 
+                journal=journal,
+                )
+                )
 
             # Not all journal articles will have vol., no., and pp.
             # because some may be "In Press".
             if "volume" in ref:
-                string = string + 'vol. ' + ref["volume"] + ', '
+                reference += 'vol. ' + ref["volume"] + ', '
 
             if "number" in ref:
-                string = string + 'no. ' + ref["number"] + ', '
+                reference += 'no. ' + ref["number"] + ', '
 
             if "pages" in ref:
-                string = string + 'pp. ' + ref["pages"] + ', '
+                reference += 'pp. ' + ref["pages"] + ', '
 
-            string = (string + ref["month"].title() + '. ' +
-                      year + closeSpan + '{:.journal}  \n')
+            reference += (
+                ref["month"].title() + '. ' +
+                year + close_span + '{:.journal}  \n'
+                )
 
             if "doi" in ref:
-                string = (string + openSpan + st + 'DOI:' + st + ' [' +
-                          ref["doi"] + '](http://dx.doi.org/' + ref["doi"]
-                          + ')' + closeSpan + '{:.doi}  \n'
-                          )
+                reference += (
+                    '{open}{strong}DOI:{strong} [{doi}]'
+                    '(http://dx.doi.org/{doi}){close}{{:.doi}}  \n'.format(
+                    open=open_span, close=close_span, strong=strong, 
+                    doi=ref["doi"],
+                    )
+                    )
 
             # Extra comments, such as links to files, should be stored
             # as "Notes" for each reference in Mendeley. Mendeley will
             # export this field with the tag "annote" in BibTeX.
             if "annote" in ref:
-                string = (string + openSpan + ref["annote"].replace('\\','') +
-                           closeSpan + '{:.comment}  \n'
-                         )
-            print(string)
-            out_file.write(string)
+                reference += (
+                    '{open}{annote}{close}{{:.comment}}  \n'.format(
+                    open=open_span, close=close_span, 
+                    annote=ref["annote"].replace('\\',''),
+                    )
+                    )
+            print(reference)
+            out_file.write(reference)
 
         # Next are conference papers and posters. Print the header to
         # the screen and the output file.
@@ -306,16 +317,18 @@ def main(argv):
             year = ref["year"]
             if year != pubyear:
                 pubyear = year
-                stri = '\n{:.year}\n###' + year + '\n'
-                print(stri)
-                out_file.write(stri)
+                write_year = '\n{{:.year}}\n### {}\n'.format(year)
+                print(write_year)
+                out_file.write(write_year)
 
             # Start building the reference string.
-            string = ('\n{:.paper}\n' +
-                      openSpan + title + closeSpan + '{:.papertitle}  \n' +
-                      openSpan + authors + closeSpan + '{:.authors}  \n' +
-                      openSpan
-                     )
+            reference = (
+                '\n{{:.paper}}\n{open}{title}{close}{{:.papertitle}}  \n'
+                '{open}{authors}{close}{{:.authors}}  \n'
+                '{open}'.format(open=open_span, close=close_span, title=title,
+                authors=authors,
+                )
+                )
 
             # Since Mendeley doesn't allow customization of BibTeX
             # output, we hack the "pages" field to contain the paper
@@ -323,36 +336,44 @@ def main(argv):
             # reference will have this, so we check for it.
             if "pages" in ref:
                 paperno = ref["pages"]
-                string = string + paperno + ', '
+                reference += paperno + ', '
 
             # Insert the conference title, stored in the "booktitle"
             # field.
             conf = ref["booktitle"]
-            string = string + conf + ', '
+            reference += conf + ', '
             if "organization" in ref:
-                string = string + ref["organization"] + ', '
+                reference += ref["organization"] + ', '
             if "address" in ref:
-                string = string + ref["address"] + ', '
+                reference += ref["address"] + ', '
 
-            string = (string + ref["month"].title() + '. ' + year + closeSpan
-                      + '{:.journal}  \n'
-                     )
+            reference += (
+                '{month}. {year}{close}{{:.journal}}  \n'.format(
+                month=ref["month"].title(), year=year, close=close_span,
+                )
+                )
 
             if "doi" in ref:
-                string = (string + openSpan + st + 'DOI:' + st + ' [' +
-                          ref["doi"] + '](http://dx.doi.org/' + ref["doi"]
-                          + ')' + closeSpan + '{:.doi}  \n'
-                         )
+                reference += (
+                    '{open}{strong}DOI:{strong} [{doi}]'
+                    '(http://dx.doi.org/{doi}){close}{{:.doi}}  \n'.format(
+                    open=open_span, strong=strong, doi=ref["doi"], 
+                    close=close_span,
+                    )
+                    )
 
             # Extra comments, such as links to files, should be stored
             # as "Notes" for each reference in Mendeley. Mendeley will
             # export this field with the tag "annote" in BibTeX.
             if "annote" in ref:
-                string = (string + openSpan + ref["annote"].replace('\\','') +
-                          closeSpan + '{:.comment}  \n'
-                         )
-            print(string)
-            out_file.write(string)
+                reference += (
+                    '{open}{annote}{close}{{:.comment}}  \n'.format(
+                    open=open_span, annote=ref["annote"].replace('\\',''), 
+                    close=close_span,
+                    )
+                    )
+            print(reference)
+            out_file.write(reference)
 
         # Finally are the theses and dissertations. Same general logic
         # as for the other reference types.
@@ -365,27 +386,33 @@ def main(argv):
             year = ref["year"]
             if year != pubyear:
                 pubyear = year
-                stri = '\n{:.year}\n###' + year + '\n'
-                print(stri)
-                out_file.write(stri)
+                write_year = '\n{{:.year}}\n### {}\n'.format(year)
+                print(write_year)
+                out_file.write(write_year)
 
-            string = ('\n{:.paper}\n' +
-                      openSpan + title + closeSpan + '{:.papertitle}  \n' +
-                      openSpan + authors + closeSpan + '{:.authors}  \n' +
-                      openSpan )
+            reference = (
+                '\n{{:.paper}}\n{open}{title}{close}{{:.papertitle}}  \n'
+                '{open}{authors}{close}{{:.authors}}  \n'
+                '{open}'.format(open=open_span, close=close_span, title=title,
+                authors=authors,
+                )
+                )
             if "school" in ref:
-                string = string + ref["school"] + ', '
+                reference += ref["school"] + ', '
             if "month" in ref:
-                string = string + ref["month"].title() + '. '
+                reference += ref["month"].title() + '. '
 
-            string = string + year + closeSpan + '{:.journal}  \n'
+            reference += year + close_span + '{:.journal}  \n'
 
             if "annote" in ref:
-                string = (string + openSpan + ref["annote"].replace('\\','') +
-                          closeSpan + '{:.comment}  \n'
-                         )
-            print(string)
-            out_file.write(string)
+                reference += (
+                    '{open}{annote}{close}{{:.comment}}  \n'.format(
+                    open=open_span, annote=ref["annote"].replace('\\',''), 
+                    close=close_span,
+                    )
+                    )
+            print(reference)
+            out_file.write(reference)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
