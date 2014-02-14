@@ -2,7 +2,7 @@ Journal Articles
 ---
 
 {:.year}
-###2013
+### 2013
 
 {:.paper}
 <span>A study of the best ways to make up a name</span>{:.papertitle}  
@@ -14,7 +14,7 @@ Conference Publications and Posters
 ---
 
 {:.year}
-###2013
+### 2013
 
 {:.paper}
 <span>How to properly cite media</span>{:.papertitle}  
@@ -26,7 +26,7 @@ Master's Thesis
 ---
 
 {:.year}
-###2010
+### 2010
 
 {:.paper}
 <span>The best sources of name generation</span>{:.papertitle}  
