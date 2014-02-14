@@ -260,7 +260,8 @@ def main(argv):
     #
     #Open the output file with utf-8 encoding and write mode.
     #
-    with open(outputFileName, encoding='utf-8', mode='w') as outFile:
+    with open(outputFileName, encoding='utf-8', mode='w',
+              newline='') as outFile:
         #
         #Start with journal articles. Print the header to the screen
         #and output file.
