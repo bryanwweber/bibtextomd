@@ -5,19 +5,19 @@
 #website, bryanwweber.com. The format of the output is kramdown, and
 #is intended to be included in a file to be processed by Jekyll. The
 #BibTeX file is expected to be from Mendeley, although Mendeley follows
-#the standard conventions pretty well, so most BibTeX files should 
+#the standard conventions pretty well, so most BibTeX files should
 #work. bibtexparser is Python 3 ONLY!
 #
 #v. 0.1.0 - initial release
 #v. 0.1.1 - Fix escape character bug in annote field. Add help output
 #           with option -h. 14-OCT-2013
-#v. 0.2.0 - Add option to specify highlighted author name on the 
+#v. 0.2.0 - Add option to specify highlighted author name on the
 #           command line input, -a. 04-NOV-2013
 #v. 0.2.1 - Fix bug where no opening span tag was printed on the
 #           university name line for the thesis. 04-NOV-2013
 #v. 0.2.2 - Add shebang to the script so that it can be run directly
 #           from the command line - no more `python3 bib.py -options`
-#           needed, just `py bib.py -options` on Windows or `./bib.py 
+#           needed, just `py bib.py -options` on Windows or `./bib.py
 #           -options` on Unix type systems will do!
 #v. 0.2.3 - Add better error printing. Define help message in one place
 #           so it can be reused. Change option loopups to sets instead
@@ -48,20 +48,20 @@ import sys, getopt
 #
 def reorder(names, faname='F.A. Author'):
     """Format the string of author names and return a string.
-    
-    Adapated from one of the `customization` functions in 
+
+    Adapated from one of the `customization` functions in
     `bibtexparser`.
     INPUT:
     names -- string of names to be formatted. The names from BibTeX are
              formatted in the style "Last, First Middle and Last, First
              Middle and Last, First Middle" and this is the expected
              style here.
-    faname -- string of the initialized name of the author to whom 
+    faname -- string of the initialized name of the author to whom
               formatting will be applied
-              default: 'F.A. Author' 
+              default: 'F.A. Author'
     OUTPUT:
     nameout -- string of formatted names.
-    
+
     """
     #
     #Set the format tag for the website's owner, to highlight where on
@@ -96,7 +96,7 @@ def reorder(names, faname='F.A. Author'):
         #
         namesplit = namestring.split(',', 1)
         #
-        #In the expected format, the first element of the split 
+        #In the expected format, the first element of the split
         #namestring is the last name. Strip any whitespace.
         #
         last = namesplit[0].strip()
@@ -134,7 +134,7 @@ def reorder(names, faname='F.A. Author'):
         #Now that all the first name edge cases are sorted out, we want
         #to initialize all the first names. Set the variable initials
         #to an empty string to we can add to it. Then loop through each
-        #of the items in the list of first names. Take the first 
+        #of the items in the list of first names. Take the first
         #element of each item and append a period, but no space.
         #
         initials = ''
@@ -189,20 +189,20 @@ def main(argv):
     "-a 'author', --author='f.a. name': Set the name of the author"
     "to be highlighted. Default: 'F.A. Author'")
     try:
-        opts, args = getopt.getopt(argv, "hb:o:a:", 
-                                   ["help", "bibfile=", "output=", 
+        opts, args = getopt.getopt(argv, "hb:o:a:",
+                                   ["help", "bibfile=", "output=",
                                    "author="])
     except getopt.GetoptError as e:
         print("You did not enter an option properly. Please try again.")
         print(e)
         print(help)
         sys.exit(2)
-        
+
     # If the user doesn't input any options, print the help.
     if not opts:
         print(help)
         sys.exit(0)
-        
+
     for opt, arg in opts:
         if opt in {"-h", "--help"}:
             print(help)
@@ -225,7 +225,7 @@ def main(argv):
     openSpan = '<span>'
     closeSpan = '</span>'
     #
-    #Open and parse the BibTeX file in `bibFileName` using 
+    #Open and parse the BibTeX file in `bibFileName` using
     #`bibtexparser`
     #
     with open(bibFileName,'r') as bibFile:
@@ -253,8 +253,8 @@ def main(argv):
     #
     sortDict = {}
     for type in types:
-        temp = sorted([val for key, val in refsdict.items() 
-                      if val["type"] == type], key=lambda l: 
+        temp = sorted([val for key, val in refsdict.items()
+                      if val["type"] == type], key=lambda l:
                       datetime.strptime(l["month"],'%b').month, reverse=True)
         sortDict[type] = sorted(temp, key=lambda k: k["year"], reverse=True)
     #
@@ -269,7 +269,7 @@ def main(argv):
         print('Journal Articles\n---\n')
         outFile.write('Journal Articles\n---\n')
         #
-        #To get the year numbering correct, we have to set a dummy 
+        #To get the year numbering correct, we have to set a dummy
         #value for pubyear (usage described below).
         #
         pubyear = ''
@@ -315,9 +315,9 @@ def main(argv):
             #HTML tag. Each line should be ended with two spaces before
             #the newline so that kramdown inserts an HTML <br> there.
             #
-            string = ('\n{:.paper}\n' + 
-                      openSpan + title + closeSpan + '{:.papertitle}  \n' + 
-                      openSpan + authors + closeSpan + '{:.authors}  \n' + 
+            string = ('\n{:.paper}\n' +
+                      openSpan + title + closeSpan + '{:.papertitle}  \n' +
+                      openSpan + authors + closeSpan + '{:.authors}  \n' +
                       openSpan + em + journal + em + ', '
                       )
             #
@@ -326,24 +326,24 @@ def main(argv):
             #
             if "volume" in ref:
                 string = string + 'vol. ' + ref["volume"] + ', '
-            
+
             if "number" in ref:
                 string = string + 'no. ' + ref["number"] + ', '
-                
+
             if "pages" in ref:
                 string = string + 'pp. ' + ref["pages"] + ', '
-                
+
             string = (string + ref["month"].title() + '. ' +
                       year + closeSpan + '{:.journal}  \n')
-            
+
             if "doi" in ref:
-                string = (string + openSpan + st + 'DOI:' + st + ' [' + 
+                string = (string + openSpan + st + 'DOI:' + st + ' [' +
                           ref["doi"] + '](http://dx.doi.org/' + ref["doi"]
                           + ')' + closeSpan + '{:.doi}  \n'
                           )
             #
-            #Extra comments, such as links to files, should be stored as 
-            #"Notes" for each reference in Mendeley. Mendeley will export 
+            #Extra comments, such as links to files, should be stored as
+            #"Notes" for each reference in Mendeley. Mendeley will export
             #this field with the tag "annote" in BibTeX.
             #
             if "annote" in ref:
@@ -378,13 +378,13 @@ def main(argv):
             #
             #Start building the reference string.
             #
-            string = ('\n{:.paper}\n' + 
-                      openSpan + title + closeSpan + '{:.papertitle}  \n' + 
+            string = ('\n{:.paper}\n' +
+                      openSpan + title + closeSpan + '{:.papertitle}  \n' +
                       openSpan + authors + closeSpan + '{:.authors}  \n' +
                       openSpan
                      )
             #
-            #Since Mendeley doesn't allow customization of BibTeX 
+            #Since Mendeley doesn't allow customization of BibTeX
             #output, we hack the "pages" field to contain the paper
             #number for the conference paper. Not all of this type of
             #reference will have this, so we check for it.
@@ -393,7 +393,7 @@ def main(argv):
                 paperno = ref["pages"]
                 string = string + paperno + ', '
             #
-            #Insert the conference title, stored in the "booktitle" 
+            #Insert the conference title, stored in the "booktitle"
             #field.
             #
             string = string + conf + ', '
@@ -401,21 +401,21 @@ def main(argv):
                 string = string + ref["organization"] + ', '
             if "address" in ref:
                 string = string + ref["address"] + ', '
-            
+
             string = (string + ref["month"].title() + '. ' + year + closeSpan
                       + '{:.journal}  \n'
                      )
-            
+
             if "doi" in ref:
-                string = (string + openSpan + st + 'DOI:' + st + ' [' + 
+                string = (string + openSpan + st + 'DOI:' + st + ' [' +
                           ref["doi"] + '](http://dx.doi.org/' + ref["doi"]
                           + ')' + closeSpan + '{:.doi}  \n'
                          )
             #
-            #Extra comments, such as links to files, should be stored as 
-            #"Notes" for each reference in Mendeley. Mendeley will export 
+            #Extra comments, such as links to files, should be stored as
+            #"Notes" for each reference in Mendeley. Mendeley will export
             #this field with the tag "annote" in BibTeX.
-            #            
+            #
             if "annote" in ref:
                 string = (string + openSpan + ref["annote"].replace('\\','') +
                           closeSpan + '{:.comment}  \n'
@@ -438,10 +438,10 @@ def main(argv):
                 stri = '\n{:.year}\n###' + year + '\n'
                 print(stri)
                 outFile.write(stri)
-                
-            string = ('\n{:.paper}\n' + 
+
+            string = ('\n{:.paper}\n' +
                       openSpan + title + closeSpan + '{:.papertitle}  \n' +
-                      openSpan + authors + closeSpan + '{:.authors}  \n' + 
+                      openSpan + authors + closeSpan + '{:.authors}  \n' +
                       openSpan )
             if "school" in ref:
                 string = string + ref["school"] + ', '
@@ -451,7 +451,7 @@ def main(argv):
             string = string + year + closeSpan + '{:.journal}  \n'
 
             if "annote" in ref:
-                string = (string + openSpan + ref["annote"].replace('\\','') + 
+                string = (string + openSpan + ref["annote"].replace('\\','') +
                           closeSpan + '{:.comment}  \n'
                          )
             print(string)
