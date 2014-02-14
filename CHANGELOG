@@ -1,0 +1,30 @@
+#######################################################################
+# Bryan W. Weber, 27 Aug. 2013 13:46
+# Take BibTeX bibliography and export citations in the format of my
+# website, bryanwweber.com. The format of the output is kramdown, and
+# is intended to be included in a file to be processed by Jekyll. The
+# BibTeX file is expected to be from Mendeley, although Mendeley follows
+# the standard conventions pretty well, so most BibTeX files should
+# work. bibtexparser is Python 3 ONLY!
+# 
+# v. 0.1.0 - initial release
+# v. 0.1.1 - Fix escape character bug in annote field. Add help output
+#            with option -h. 14-OCT-2013
+# v. 0.2.0 - Add option to specify highlighted author name on the
+#            command line input, -a. 04-NOV-2013
+# v. 0.2.1 - Fix bug where no opening span tag was printed on the
+#            university name line for the thesis. 04-NOV-2013
+# v. 0.2.2 - Add shebang to the script so that it can be run directly
+#            from the command line - no more `python3 bib.py -options`
+#            needed, just `py bib.py -options` on Windows or `./bib.py
+#            -options` on Unix type systems will do!
+# v. 0.2.3 - Add better error printing. Define help message in one
+#            place so it can be reused. Change option lookups to sets
+#            instead of what they were before (tuples?).
+# v. 0.2.4 - Add try:except for bibtexparser import to print an error
+#            if bibtexparser is not installed. Change string formatting
+#            of help string. 02-FEB-2014
+# v. 0.2.5 - Fix newlines on Windows - only Unix style \n will be
+#            written now. Print help if no options are specified on the
+#            command line by the user. 14-FEB-2014
+#######################################################################

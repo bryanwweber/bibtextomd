@@ -12,15 +12,20 @@ Usage
 
 From the command line,
 
-    python bib.py [options]
+    py bib.py [options]
 
-runs the script. The default file names for the BibTeX input and 
+runs the script. Running with no options specified prints the help. 
+The default file names for the BibTeX input and 
 markdown output are `refs.bib` and `pubs.md` respectively. 
 
 Options
 ---
 
     -h, --help: Print the help and exit
+    
     -o filename, --output=filename: Set the filename of the markdown output. Default: pubs.md
+    
     -b filename, --bibfile=filename: Set the filename of the BibTeX input. Default: refs.bib
-    -a 'author', --author='f.a. name': Set the name of the author to be highlighted. Default: 'F.A. Author'
+    
+    -a 'author', --author='f.a. name': Set the name of the author to be highlighted. Default: 
+    "F.A. Author". Name should be specifed between double quotes: "F.A. Author"
