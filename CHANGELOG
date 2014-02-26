@@ -5,7 +5,7 @@
 # is intended to be included in a file to be processed by Jekyll. The
 # BibTeX file is expected to be from Mendeley, although Mendeley follows
 # the standard conventions pretty well, so most BibTeX files should
-# work. bibtexparser is Python 3 ONLY!
+# work. bibtextomd is Python 3 ONLY!
 # 
 # v. 0.1.0 - initial release
 # v. 0.1.1 - Fix escape character bug in annote field. Add help output
@@ -27,4 +27,6 @@
 # v. 0.2.5 - Fix newlines on Windows - only Unix style \n will be
 #            written now. Print help if no options are specified on the
 #            command line by the user. 14-FEB-2014
+# v. 0.2.6 - Fix parsing of latex-style unicode characters (\'{e}) and
+#            names with {}. 26-FEB-2014
 #######################################################################

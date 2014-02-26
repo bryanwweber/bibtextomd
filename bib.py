@@ -7,6 +7,7 @@ import getopt
 # Package imports
 try:
     from bibtexparser.bparser import BibTexParser
+    from bibtexparser.customization import convert_to_unicode
 except ImportError:
     print("We need the BibTeX parser from the bibtexparser package on PyPI. "
           "If pip is installed, `pip install bibtexparser` will install the "
@@ -59,8 +60,8 @@ def reorder(names, faname='F.A. Author'):
         namesplit = namestring.split(',', 1)
 
         # In the expected format, the first element of the split
-        # namestring is the last name. Strip any whitespace.
-        last = namesplit[0].strip()
+        # namestring is the last name. Strip any whitespace and {}.
+        last = namesplit[0].strip().strip('{}')
 
         # There could be many first/middle names, so we collect them in
         # a list. All of the first/middle names are stored in the
@@ -82,7 +83,7 @@ def reorder(names, faname='F.A. Author'):
         # For the case of hyphenated first names, we need to split at
         # the hyphen as well. Possible bug: this only works if the
         # first first name is the hyphenated one, and this replaces all
-        # of thefirst names with the names split at the hyphen. We'd
+        # of the first names with the names split at the hyphen. We'd
         # like to handle multiple hyphens or a hyphenated name with an
         # initial more intelligently.
         if '-' in firsts[0]:
@@ -96,7 +97,7 @@ def reorder(names, faname='F.A. Author'):
         # space.
         initials = ''
         for item in firsts:
-            initials = initials + item[0] + '.'
+            initials += item[0] + '.'
 
         # Stick all of the parts of the name together in `tidynames`
         tidynames.append(initials + ' ' + last)
@@ -177,7 +178,7 @@ def main(argv):
     # `bibtexparser`
 
     with open(bib_file_name,'r') as bib_file:
-        bp = BibTexParser(bib_file)
+        bp = BibTexParser(bib_file, customization=convert_to_unicode)
 
     # Get a dictionary of dictionaries of key, value pairs from the
     # BibTeX file. The structure is 
