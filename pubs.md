@@ -19,7 +19,7 @@ Conference Publications and Posters
 {:.paper}
 <span>How to properly cite media</span>{:.papertitle}  
 <span>S.B. Second, T.C. Third, S. Fourth-Fifth, and **F.A. Author**</span>{:.authors}  
-<span>Paper 2A12, 1st International Conference on BibTeX, University, Anytown, CA, May. 2013</span>{:.journal}  
+<span>Paper 2A12, 1st International Conference on BibTeX, University, Anytown, CA, May 2013</span>{:.journal}  
 <span>The files for this paper can be found at the following link</span>{:.comment}  
 
 Master's Thesis

@@ -191,7 +191,7 @@ def main(argv):
     types = []
     for k,ref in refsdict.items():
         types.append(ref["type"])
-    types  = set(types)
+    types = set(types)
 
     # For each of the types of reference, we need to sort each by month
     # then year. We store the dictionary representing each reference in
@@ -276,9 +276,16 @@ def main(argv):
             if "pages" in ref:
                 reference += 'pp. ' + ref["pages"] + ', '
 
+            month = ref["month"].title()
+            if month == "May":
+                month += ' '
+            else:
+                month += '. '
+
             reference += (
-                ref["month"].title() + '. ' +
-                year + close_span + '{:.journal}  \n'
+                '{month}{year}{close}{{:.journal}}  \n'.format(
+                month=month, year=year, close=close_span,
+                )
                 )
 
             if "doi" in ref:
@@ -348,9 +355,15 @@ def main(argv):
             if "address" in ref:
                 reference += ref["address"] + ', '
 
+            month = ref["month"].title()
+            if month == "May":
+                month += ' '
+            else:
+                month += '. '
+
             reference += (
-                '{month}. {year}{close}{{:.journal}}  \n'.format(
-                month=ref["month"].title(), year=year, close=close_span,
+                '{month}{year}{close}{{:.journal}}  \n'.format(
+                month=month, year=year, close=close_span,
                 )
                 )
 
@@ -401,7 +414,12 @@ def main(argv):
             if "school" in ref:
                 reference += ref["school"] + ', '
             if "month" in ref:
-                reference += ref["month"].title() + '. '
+                month = ref["month"].title()
+                if month == "May":
+                    month += ' '
+                else:
+                    month += '. '
+                reference += month
 
             reference += year + close_span + '{:.journal}  \n'
 
