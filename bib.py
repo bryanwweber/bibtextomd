@@ -178,7 +178,7 @@ def main(argv):
     # `bibtexparser`
 
     with open(bib_file_name,'r') as bib_file:
-        bp = BibTexParser(bib_file, customization=convert_to_unicode)
+        bp = BibTexParser(bib_file.read(), customization=convert_to_unicode)
 
     # Get a dictionary of dictionaries of key, value pairs from the
     # BibTeX file. The structure is 
