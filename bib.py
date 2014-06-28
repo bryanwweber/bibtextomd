@@ -42,7 +42,7 @@ def reorder(names, faname):
     # " and " and strip out any remaining whitespace.
     nameslist = [i.strip() for i in names.replace('\n', ' ').split(" and ")]
 
-    # Initialize a list to store the names after they've been tidied 
+    # Initialize a list to store the names after they've been tidied
     # up.
     tidynames = []
 
@@ -176,7 +176,7 @@ def main(argv):
         bp = BibTexParser(bib_file.read(), customization=convert_to_unicode)
 
     # Get a dictionary of dictionaries of key, value pairs from the
-    # BibTeX file. The structure is 
+    # BibTeX file. The structure is
     # {ID:{authors:...},ID:{authors:...}}.
     refsdict = bp.get_entry_dict()
 
@@ -254,8 +254,8 @@ def main(argv):
             reference = (
                 '\n{{:.paper}}\n{open}{title}{close}{{:.papertitle}}  \n'
                 '{open}{authors}{close}{{:.authors}}  \n'
-                '{open}{em}{journal}{em}, '.format(open=open_span, 
-                close=close_span, title=title, authors=authors, em=em, 
+                '{open}{em}{journal}{em}, '.format(open=open_span,
+                close=close_span, title=title, authors=authors, em=em,
                 journal=journal,
                 )
                 )
@@ -287,7 +287,7 @@ def main(argv):
                 reference += (
                     '{open}{strong}DOI:{strong} [{doi}]'
                     '(http://dx.doi.org/{doi}){close}{{:.doi}}  \n'.format(
-                    open=open_span, close=close_span, strong=strong, 
+                    open=open_span, close=close_span, strong=strong,
                     doi=ref["doi"],
                     )
                     )
@@ -298,7 +298,7 @@ def main(argv):
             if "annote" in ref:
                 reference += (
                     '{open}{annote}{close}{{:.comment}}  \n'.format(
-                    open=open_span, close=close_span, 
+                    open=open_span, close=close_span,
                     annote=ref["annote"].replace('\\',''),
                     )
                     )
@@ -366,7 +366,7 @@ def main(argv):
                 reference += (
                     '{open}{strong}DOI:{strong} [{doi}]'
                     '(http://dx.doi.org/{doi}){close}{{:.doi}}  \n'.format(
-                    open=open_span, strong=strong, doi=ref["doi"], 
+                    open=open_span, strong=strong, doi=ref["doi"],
                     close=close_span,
                     )
                     )
@@ -377,7 +377,7 @@ def main(argv):
             if "annote" in ref:
                 reference += (
                     '{open}{annote}{close}{{:.comment}}  \n'.format(
-                    open=open_span, annote=ref["annote"].replace('\\',''), 
+                    open=open_span, annote=ref["annote"].replace('\\',''),
                     close=close_span,
                     )
                     )
@@ -421,7 +421,7 @@ def main(argv):
             if "annote" in ref:
                 reference += (
                     '{open}{annote}{close}{{:.comment}}  \n'.format(
-                    open=open_span, annote=ref["annote"].replace('\\',''), 
+                    open=open_span, annote=ref["annote"].replace('\\',''),
                     close=close_span,
                     )
                     )
