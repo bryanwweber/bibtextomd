@@ -29,4 +29,7 @@
 #            command line by the user. 14-FEB-2014
 # v. 0.2.6 - Fix parsing of latex-style unicode characters (\'{e}) and
 #            names with {}. 26-FEB-2014
+# v. 0.3.0 - Switch to argparse instead of getopt for command line
+#            option parsing. Clean up whitespace at end of lines.
+#            28-JUN-2014
 #######################################################################
