@@ -393,9 +393,7 @@ def main(argv):
             year = ref["year"]
             if year != pubyear:
                 pubyear = year
-                write_year = '\n{{:.year}}\n### {}\n'.format(year)
-                print(write_year)
-                out_file.write(write_year)
+                write_year = '{{:.year}}\n### {}\n'.format(year)
 
             reference = (
                 '\n{{:.paper}}\n{open}{title}{close}{{:.papertitle}}  \n'
@@ -430,14 +428,20 @@ def main(argv):
             if ref["id"] == "Weber2014a":
                 print("Ph.D. Dissertation\n---\n")
                 out_file.write("\nPh.D. Dissertation\n---\n")
+                print(write_year)
+                out_file.write(write_year)
                 print(reference)
                 out_file.write(reference)
             elif ref["id"] == "Weber2010":
                 print("Master's Thesis\n---\n")
                 out_file.write("\nMaster's Thesis\n---\n")
+                print(write_year)
+                out_file.write(write_year)
                 print(reference)
                 out_file.write(reference)
             else:
+                print(write_year)
+                out_file.write(write_year)
                 print(reference)
                 out_file.write(reference)
 
