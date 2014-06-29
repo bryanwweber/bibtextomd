@@ -386,8 +386,6 @@ def main(argv):
 
         # Finally are the theses and dissertations. Same general logic
         # as for the other reference types.
-        print("Master's Thesis\n---\n")
-        out_file.write("\nMaster's Thesis\n---\n")
         pubyear = '2200'
         for ref in sort_dict["phdthesis"]:
             authors = reorder(ref["author"],faname)
@@ -425,8 +423,23 @@ def main(argv):
                     close=close_span,
                     )
                     )
-            print(reference)
-            out_file.write(reference)
+
+            # Here we have some me-specific customization, where my
+            # Ph.D. dissertation and Master's thesis are picked out
+            # of the reference list specifically.
+            if ref["id"] == "Weber2014a":
+                print("Ph.D. Dissertation\n---\n")
+                out_file.write("\nPh.D. Dissertation\n---\n")
+                print(reference)
+                out_file.write(reference)
+            elif ref["id"] == "Weber2010":
+                print("Master's Thesis\n---\n")
+                out_file.write("\nMaster's Thesis\n---\n")
+                print(reference)
+                out_file.write(reference)
+            else:
+                print(reference)
+                out_file.write(reference)
 
 if __name__ == "__main__":
     main(sys.argv[1:])
