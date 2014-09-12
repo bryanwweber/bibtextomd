@@ -13,6 +13,7 @@ except ImportError:
           "If pip is installed, `pip install bibtexparser` will install the "
           "package. Code is tested with version 0.4, may not work with other "
           "versions.")
+    sys.exit(1)
 
 # First is to define a function to format the names we get from BibTeX,
 # since this task will be the same for every paper type. The current
