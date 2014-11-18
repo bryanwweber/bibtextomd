@@ -233,7 +233,6 @@ def main(argv):
             if '\&' in journal:
                 words = journal.strip().split('\&')
                 journal = words[0] + '&' + words[1]
-            doi = ref["doi"]
 
             # Get the publication year. If the year of the current
             # reference is not equal to the year of the previous
