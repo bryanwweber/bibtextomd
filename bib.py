@@ -426,15 +426,15 @@ def main(argv):
             # Ph.D. dissertation and Master's thesis are picked out
             # of the reference list specifically.
             if ref["id"] == "Weber2014a":
-                print("Ph.D. Dissertation\n---\n")
-                out_file.write("\nPh.D. Dissertation\n---\n")
+                print("Ph.D. Dissertation\n---\n\n")
+                out_file.write("\nPh.D. Dissertation\n---\n\n")
                 print(write_year)
                 out_file.write(write_year)
                 print(reference)
                 out_file.write(reference)
             elif ref["id"] == "Weber2010":
-                print("Master's Thesis\n---\n")
-                out_file.write("\nMaster's Thesis\n---\n")
+                print("Master's Thesis\n---\n\n")
+                out_file.write("\nMaster's Thesis\n---\n\n")
                 print(write_year)
                 out_file.write(write_year)
                 print(reference)
