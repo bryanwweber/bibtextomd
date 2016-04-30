@@ -3,6 +3,7 @@
 from datetime import datetime
 import sys
 import argparse
+import warnings
 
 # Package imports
 try:
@@ -17,8 +18,7 @@ except ImportError:
 
 
 # First is to define a function to format the names we get from BibTeX,
-# since this task will be the same for every paper type. The current
-# format is "F.M. Last, F.M. Last, and F.M. Last".
+# since this task will be the same for every paper type.
 def reorder(names, faname):
     """Format the string of author names and return a string.
 
@@ -32,7 +32,8 @@ def reorder(names, faname):
     faname -- string of the initialized name of the author to whom
               formatting will be applied
     OUTPUT:
-    nameout -- string of formatted names.
+    nameout -- string of formatted names. The current format is
+               "F.M. Last, F.M. Last, and F.M. Last".
 
     """
     # Set the format tag for the website's owner, to highlight where on
@@ -110,7 +111,7 @@ def reorder(names, faname):
             i = tidynames.index(faname)
             tidynames[i] = my_name_format_tag + tidynames[i] + my_name_format_tag
         except ValueError:
-            print("Couldn't find ", faname, "in the names list. Sorry!")
+            warnings.warn("Couldn't find {} in the names list. Sorry!".format(faname))
 
     # Handle the various cases of number of authors and how they should
     # be joined. Convert the elements of `tidynames` to a string.
@@ -159,10 +160,6 @@ def main(argv):
     bib_file_name = args.bibfile
     output_file_name = args.output
     faname = args.author
-    if args.author is None:
-        print("\nWARNING: A name to highlight has not been specified. See the"
-              " help and the option --author to specify a name to highlight\n"
-              )
 
     # Set the formatting identifiers. Since we're using kramdown, we
     # don't have to use the HTML tags.
