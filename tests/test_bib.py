@@ -1,6 +1,7 @@
 """
 Testing module for bib.py
 """
+import os
 import pytest
 from bibtextomd.bib import main, reorder, load_bibtex, journal_article, in_proceedings, phd_thesis
 
@@ -91,3 +92,12 @@ def test_phd_thesis(load_bibtex_for_test):
         "<span>Files at the following link</span>{:.comment}  \n"
         )
     assert reference == reference_blessed
+
+
+def test_main():
+    args = '-b tests/refs.bib -o tests/pubs.md'.split()
+    main(args)
+    with open('tests/pubs.md', 'r') as pubs, open('tests/pubs_blessed.md', 'r') as blessed:
+        assert pubs.read() == blessed.read()
+    if os.path.exists('tests/pubs.md'):
+        os.remove('tests/pubs.md')
