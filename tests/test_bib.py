@@ -60,7 +60,7 @@ def test_journal_article(load_bibtex_for_test):
         "<span>A study of the best ways to make up a name</span>{:.papertitle}  \n"
         "<span>F.A. Author, S.B. Sécond, and T.C. Third</span>{:.authors}  \n"
         "<span>_Journal Of Made Up Names_, Aug. 2013</span>{:.journal}  \n"
-        "<span>**DOI:** [10.0000/made-up-doi](http://dx.doi.org/10.0000/made-up-doi)</span>"
+        "<span>**DOI:** [10.0000/made-up-doi](https://dx.doi.org/10.0000/made-up-doi)</span>"
         "{:.doi}  \n"
         )
     assert reference == reference_blessed
