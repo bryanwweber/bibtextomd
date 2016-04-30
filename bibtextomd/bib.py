@@ -285,9 +285,7 @@ def main(argv):
     with open(output_file_name, encoding='utf-8', mode='w',
               newline='') as out_file:
 
-        # Start with journal articles. Print the header to the screen
-        # and output file.
-        print('Journal Articles\n---\n')
+        # Start with journal articles.
         out_file.write('Journal Articles\n---\n')
 
         # To get the year numbering correct, we have to set a dummy
@@ -303,21 +301,17 @@ def main(argv):
         for ref in sort_dict["article"]:
             # Get the publication year. If the year of the current
             # reference is not equal to the year of the previous
-            # reference, we need to print the year out and set
-            # `pubyear` equal to `year`.
+            # reference, we need to set `pubyear` equal to `year`.
             year = ref["year"]
             if year != pubyear:
                 pubyear = year
             write_year = '\n{{:.year}}\n### {}\n'.format(year)
-            print(write_year)
             out_file.write(write_year)
 
             reference = journal_article(ref, faname)
             out_file.write(reference)
 
-        # Next are conference papers and posters. Print the header to
-        # the screen and the output file.
-        print('Conference Publications and Posters\n---\n')
+        # Next are conference papers and posters.
         out_file.write('\nConference Publications and Posters\n---\n')
 
         # Same trick for the pubyear as for the journal articles.
@@ -331,7 +325,6 @@ def main(argv):
             if year != pubyear:
                 pubyear = year
                 write_year = '\n{{:.year}}\n### {}\n'.format(year)
-                print(write_year)
                 out_file.write(write_year)
 
             # Start building the reference string.
@@ -391,7 +384,6 @@ def main(argv):
                         close=close_span,
                         )
                     )
-            print(reference)
             out_file.write(reference)
 
         # Finally are the theses and dissertations. Same general logic
@@ -436,23 +428,15 @@ def main(argv):
             # Ph.D. dissertation and Master's thesis are picked out
             # of the reference list specifically.
             if ref["ID"] == "Weber2014a":
-                print("Ph.D. Dissertation\n---\n\n")
                 out_file.write("\nPh.D. Dissertation\n---\n\n")
-                print(write_year)
                 out_file.write(write_year)
-                print(reference)
                 out_file.write(reference)
             elif ref["ID"] == "Author2010":
-                print("Master's Thesis\n---\n\n")
                 out_file.write("\nMaster's Thesis\n---\n\n")
-                print(write_year)
                 out_file.write(write_year)
-                print(reference)
                 out_file.write(reference)
             else:
-                print(write_year)
                 out_file.write(write_year)
-                print(reference)
                 out_file.write(reference)
 
 if __name__ == "__main__":
