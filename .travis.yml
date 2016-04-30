@@ -4,8 +4,12 @@ python:
     - "3.4"
     - "3.5"
 before_install:
-    - pip install pytest pytest-cov bibtexparser
+    - pip install --upgrade pytest pytest-cov coveralls bibtexparser
 install:
-    - pip install bryanwweber/bibtextomd
+    - python setup.py develop
 script:
     - py.test
+after_success:
+    - if [[ "$TRAVIS_PYTHON_VERSION" == "3.5" ]]; then
+          coveralls;
+      fi
