@@ -53,15 +53,14 @@ def load_bibtex_for_test():
 
 
 def test_journal_article(load_bibtex_for_test):
-    sort_dict = load_bibtex_for_test
-    ref = sort_dict["article"][0]
+    ref = load_bibtex_for_test["article"][0]
     reference = journal_article(ref, None)
     reference_blessed = (
         "\n{:.paper}\n"
-        "<span>A study of the best ways to make up a name</span>{:.papertitle}"
-        "  \n<span>F.A. Author, S.B. Sécond, and T.C. Third</span>{:.authors}"
-        "  \n<span>_Journal Of Made Up Names_, Aug. 2013</span>{:.journal}"
-        "  \n<span>**DOI:** [10.0000/made-up-doi](http://dx.doi.org/10.0000/made-up-doi)</span>"
+        "<span>A study of the best ways to make up a name</span>{:.papertitle}  \n"
+        "<span>F.A. Author, S.B. Sécond, and T.C. Third</span>{:.authors}  \n"
+        "<span>_Journal Of Made Up Names_, Aug. 2013</span>{:.journal}  \n"
+        "<span>**DOI:** [10.0000/made-up-doi](http://dx.doi.org/10.0000/made-up-doi)</span>"
         "{:.doi}  \n"
         )
     assert reference == reference_blessed
