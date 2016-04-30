@@ -6,15 +6,8 @@ import argparse
 import warnings
 
 # Package imports
-try:
-    from bibtexparser.bparser import BibTexParser
-    from bibtexparser.customization import convert_to_unicode
-except ImportError:
-    print("We need the BibTeX parser from the bibtexparser package on PyPI. "
-          "If pip is installed, `pip install bibtexparser` will install the "
-          "package. Code is tested with version 0.6.2, may not work with other "
-          "versions.")
-    sys.exit(1)
+from bibtexparser.bparser import BibTexParser
+from bibtexparser.customization import convert_to_unicode
 
 # Set the formatting identifiers. Since we're using kramdown, we
 # don't have to use the HTML tags.
