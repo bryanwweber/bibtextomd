@@ -78,15 +78,31 @@ def test_journal_article(load_bibtex_for_test):
         "\n{:.paper}\n"
         "<span>A study of the best ways to make up a name</span>{:.papertitle}  \n"
         "<span>F.A. Author, S.B. Sécond, and T.C. Third</span>{:.authors}  \n"
-        "<span>_Journal Of Made Up Names_, Aug. 2013</span>{:.journal}  \n"
+        "<span>_Journal Of Made Up Names & Words_, Aug. 2013</span>{:.journal}  \n"
         "<span>**DOI:** [10.0000/made-up-doi](https://dx.doi.org/10.0000/made-up-doi)</span>"
         "{:.doi}  \n"
         )
     assert reference == reference_blessed
 
 
+def test_journal_article_2(load_bibtex_for_test):
+    ref = load_bibtex_for_test["article"][1]
+    reference = journal_article(ref, None)
+    reference_blessed = (
+        "\n{:.paper}\n"
+        "<span>A follow up study on made up names</span>{:.papertitle}  \n"
+        "<span>F.A. Author</span>{:.authors}  \n"
+        "<span>_Journal of Made Up Names_, vol. 2, no. 4, pp. 1100--1232, May 2011</span>"
+        "{:.journal}  \n"
+        "<span>**DOI:** [10.0000/made-up-doi](https://dx.doi.org/10.0000/made-up-doi)</span>"
+        "{:.doi}  \n"
+        "<span>The files can be found at the following link</span>{:.comment}  \n"
+        )
+    assert reference == reference_blessed
+
+
 def test_in_proceedings(load_bibtex_for_test):
-    ref = load_bibtex_for_test["inproceedings"][0]
+    ref = load_bibtex_for_test["inproceedings"][1]
     reference = in_proceedings(ref, None)
     reference_blessed = (
         "\n{:.paper}\n"
@@ -95,6 +111,21 @@ def test_in_proceedings(load_bibtex_for_test):
         "<span>Paper 2A12, 1st International Conference on BibTeX, University, Anytown, CA, "
         "May 2013</span>{:.journal}  \n"
         "<span>The files for this paper can be found at the following link</span>{:.comment}  \n"
+        )
+    assert reference == reference_blessed
+
+
+def test_in_proceedings_2(load_bibtex_for_test):
+    ref = load_bibtex_for_test["inproceedings"][0]
+    reference = in_proceedings(ref, None)
+    reference_blessed = (
+        "\n{:.paper}\n"
+        "<span>How to properly cite media</span>{:.papertitle}  \n"
+        "<span>S.B. Second, T.C. Third, S. Fourth-Fifth, and F.A. Author</span>{:.authors}  \n"
+        "<span>Paper 2A12, 5th International Conference on BibTeX, University, Anytown, CA, "
+        "Jun. 2016</span>{:.journal}  \n"
+        "<span>**DOI:** [10.1000/conference-doi](https://dx.doi.org/10.1000/conference-doi)</span>"
+        "{:.doi}  \n"
         )
     assert reference == reference_blessed
 

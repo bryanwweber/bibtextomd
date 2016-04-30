@@ -434,8 +434,6 @@ def main(argv):
                 out_file.write(write_year)
                 out_file.write(reference)
             else:
+                out_file.write("\n")
                 out_file.write(write_year)
                 out_file.write(reference)
-
-if __name__ == "__main__":
-    main(sys.argv[1:])
