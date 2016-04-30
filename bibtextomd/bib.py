@@ -244,7 +244,7 @@ def in_proceedings(ref, faname):
     if "doi" in ref:
         reference += (
             '{open}{strong}DOI:{strong} [{doi}]'
-            '(http://dx.doi.org/{doi}){close}{{:.doi}}  \n'.format(
+            '(https://dx.doi.org/{doi}){close}{{:.doi}}  \n'.format(
                 open=open_span, strong=strong, doi=ref["doi"],
                 close=close_span,
                 )
