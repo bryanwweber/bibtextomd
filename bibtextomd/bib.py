@@ -279,6 +279,40 @@ def in_proceedings(ref, faname):
     return reference
 
 
+def phd_thesis(ref, faname):
+    authors = reorder(ref["author"], faname)
+    title = ref["title"]
+    year = ref["year"]
+
+    reference = (
+        '\n{{:.paper}}\n{open}{title}{close}{{:.papertitle}}  \n'
+        '{open}{authors}{close}{{:.authors}}  \n'
+        '{open}'.format(
+            open=open_span, close=close_span, title=title, authors=authors,
+            )
+        )
+    if "school" in ref:
+        reference += ref["school"] + ', '
+    if "month" in ref:
+        month = ref["month"].title()
+        if month == "May":
+            month += ' '
+        else:
+            month += '. '
+        reference += month
+
+    reference += year + close_span + '{:.journal}  \n'
+
+    if "annote" in ref:
+        reference += (
+            '{open}{annote}{close}{{:.comment}}  \n'.format(
+                open=open_span, annote=ref["annote"].replace('\\', ''),
+                close=close_span,
+                )
+            )
+    return reference
+
+
 def load_bibtex(bib_file_name):
     # Open and parse the BibTeX file in `bib_file_name` using
     # `bibtexparser`
@@ -395,46 +429,19 @@ def main(argv):
 
         # Finally are the theses and dissertations. Same general logic
         # as for the other reference types.
-        pubyear = '2200'
+        pubyear = ''
         for ref in sort_dict["phdthesis"]:
-            authors = reorder(ref["author"], faname)
-            title = ref["title"]
             year = ref["year"]
             if year != pubyear:
                 pubyear = year
                 write_year = '{{:.year}}\n### {}\n'.format(year)
 
-            reference = (
-                '\n{{:.paper}}\n{open}{title}{close}{{:.papertitle}}  \n'
-                '{open}{authors}{close}{{:.authors}}  \n'
-                '{open}'.format(
-                    open=open_span, close=close_span, title=title, authors=authors,
-                    )
-                )
-            if "school" in ref:
-                reference += ref["school"] + ', '
-            if "month" in ref:
-                month = ref["month"].title()
-                if month == "May":
-                    month += ' '
-                else:
-                    month += '. '
-                reference += month
-
-            reference += year + close_span + '{:.journal}  \n'
-
-            if "annote" in ref:
-                reference += (
-                    '{open}{annote}{close}{{:.comment}}  \n'.format(
-                        open=open_span, annote=ref["annote"].replace('\\', ''),
-                        close=close_span,
-                        )
-                    )
+            reference = phd_thesis(ref, faname)
 
             # Here we have some me-specific customization, where my
             # Ph.D. dissertation and Master's thesis are picked out
             # of the reference list specifically.
-            if ref["ID"] == "Weber2014a":
+            if ref["ID"] == "Author2014":
                 out_file.write("\nPh.D. Dissertation\n---\n\n")
                 out_file.write(write_year)
                 out_file.write(reference)
