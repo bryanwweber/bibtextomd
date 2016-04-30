@@ -61,7 +61,7 @@ def reorder(names, faname):
 
         # Split the `namestring` at the comma, but only perform the
         # split once.
-        namesplit = namestring.split(',', 1)
+        namesplit = namestring.rsplit(',', 1)
 
         # In the expected format, the first element of the split
         # namestring is the last name. Strip any whitespace and {}.
@@ -74,15 +74,6 @@ def reorder(names, faname):
         # remaining whitespace and any periods (the periods will be
         # added in the proper place later).
         firsts = [i.strip().strip('.') for i in namesplit[1].split()]
-
-        # Handle the case of juniors.
-        if last in ['jnr', 'jr', 'junior']:
-            last = firsts.pop()
-
-        # Handle the case of "from" in the name
-        for item in firsts:
-            if item in ['ben', 'van', 'der', 'de', 'la', 'le']:
-                last = firsts.pop() + ' ' + last
 
         # For the case of hyphenated first names, we need to split at
         # the hyphen as well. Possible bug: this only works if the

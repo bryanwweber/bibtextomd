@@ -54,6 +54,18 @@ def test_empty_name():
     assert n == 'F.A. Name and S.A. Name'
 
 
+def test_junior_name():
+    names = 'Name, Jr, First A. and Name, Second A.'
+    n = reorder(names, None)
+    assert n == 'F.A. Name, Jr and S.A. Name'
+
+
+def test_from_name():
+    names = 'van Name, First A.'
+    n = reorder(names, None)
+    assert n == 'F.A. van Name'
+
+
 @pytest.fixture
 def load_bibtex_for_test():
     return load_bibtex('tests/refs.bib')
