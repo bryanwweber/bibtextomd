@@ -214,6 +214,71 @@ def journal_article(ref, faname):
     return reference
 
 
+def in_proceedings(ref, faname):
+    authors = reorder(ref["author"], faname)
+    title = ref["title"]
+    year = ref["year"]
+
+    # Start building the reference string.
+    reference = (
+        '\n{{:.paper}}\n{open}{title}{close}{{:.papertitle}}  \n'
+        '{open}{authors}{close}{{:.authors}}  \n'
+        '{open}'.format(
+            open=open_span, close=close_span, title=title, authors=authors,
+            )
+        )
+
+    # Since Mendeley doesn't allow customization of BibTeX
+    # output, we hack the "pages" field to contain the paper
+    # number for the conference paper. Not all of this type of
+    # reference will have this, so we check for it.
+    if "pages" in ref:
+        paperno = ref["pages"]
+        reference += paperno + ', '
+
+    # Insert the conference title, stored in the "booktitle"
+    # field.
+    conf = ref["booktitle"]
+    reference += conf + ', '
+    if "organization" in ref:
+        reference += ref["organization"] + ', '
+    if "address" in ref:
+        reference += ref["address"] + ', '
+
+    month = ref["month"].title()
+    if month == "May":
+        month += ' '
+    else:
+        month += '. '
+
+    reference += (
+        '{month}{year}{close}{{:.journal}}  \n'.format(
+            month=month, year=year, close=close_span,
+            )
+        )
+
+    if "doi" in ref:
+        reference += (
+            '{open}{strong}DOI:{strong} [{doi}]'
+            '(http://dx.doi.org/{doi}){close}{{:.doi}}  \n'.format(
+                open=open_span, strong=strong, doi=ref["doi"],
+                close=close_span,
+                )
+            )
+
+    # Extra comments, such as links to files, should be stored
+    # as "Notes" for each reference in Mendeley. Mendeley will
+    # export this field with the tag "annote" in BibTeX.
+    if "annote" in ref:
+        reference += (
+            '{open}{annote}{close}{{:.comment}}  \n'.format(
+                open=open_span, annote=ref["annote"].replace('\\', ''),
+                close=close_span,
+                )
+            )
+    return reference
+
+
 def load_bibtex(bib_file_name):
     # Open and parse the BibTeX file in `bib_file_name` using
     # `bibtexparser`
@@ -319,71 +384,13 @@ def main(argv):
 
         # Loop through the references in the `inproceedings` type.
         for ref in sort_dict["inproceedings"]:
-            authors = reorder(ref["author"], faname)
-            title = ref["title"]
             year = ref["year"]
             if year != pubyear:
                 pubyear = year
                 write_year = '\n{{:.year}}\n### {}\n'.format(year)
                 out_file.write(write_year)
 
-            # Start building the reference string.
-            reference = (
-                '\n{{:.paper}}\n{open}{title}{close}{{:.papertitle}}  \n'
-                '{open}{authors}{close}{{:.authors}}  \n'
-                '{open}'.format(
-                    open=open_span, close=close_span, title=title, authors=authors,
-                    )
-                )
-
-            # Since Mendeley doesn't allow customization of BibTeX
-            # output, we hack the "pages" field to contain the paper
-            # number for the conference paper. Not all of this type of
-            # reference will have this, so we check for it.
-            if "pages" in ref:
-                paperno = ref["pages"]
-                reference += paperno + ', '
-
-            # Insert the conference title, stored in the "booktitle"
-            # field.
-            conf = ref["booktitle"]
-            reference += conf + ', '
-            if "organization" in ref:
-                reference += ref["organization"] + ', '
-            if "address" in ref:
-                reference += ref["address"] + ', '
-
-            month = ref["month"].title()
-            if month == "May":
-                month += ' '
-            else:
-                month += '. '
-
-            reference += (
-                '{month}{year}{close}{{:.journal}}  \n'.format(
-                    month=month, year=year, close=close_span,
-                    )
-                )
-
-            if "doi" in ref:
-                reference += (
-                    '{open}{strong}DOI:{strong} [{doi}]'
-                    '(http://dx.doi.org/{doi}){close}{{:.doi}}  \n'.format(
-                        open=open_span, strong=strong, doi=ref["doi"],
-                        close=close_span,
-                        )
-                    )
-
-            # Extra comments, such as links to files, should be stored
-            # as "Notes" for each reference in Mendeley. Mendeley will
-            # export this field with the tag "annote" in BibTeX.
-            if "annote" in ref:
-                reference += (
-                    '{open}{annote}{close}{{:.comment}}  \n'.format(
-                        open=open_span, annote=ref["annote"].replace('\\', ''),
-                        close=close_span,
-                        )
-                    )
+            reference = in_proceedings(ref, faname)
             out_file.write(reference)
 
         # Finally are the theses and dissertations. Same general logic
