@@ -48,6 +48,12 @@ def test_hyphenated_name():
     assert n == 'H.A. Name'
 
 
+def test_empty_name():
+    names = 'Name, First A. and  and Name, Second, A.'
+    n = reorder(names, None)
+    assert n == 'F.A. Name and S.A. Name'
+
+
 @pytest.fixture
 def load_bibtex_for_test():
     return load_bibtex('tests/refs.bib')
