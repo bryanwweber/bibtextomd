@@ -2,7 +2,7 @@
 Testing module for bib.py
 """
 import pytest
-from bibtextomd.bib import main, reorder, load_bibtex, journal_article, in_proceedings
+from bibtextomd.bib import main, reorder, load_bibtex, journal_article, in_proceedings, phd_thesis
 
 
 def test_single_author_good():
@@ -69,7 +69,6 @@ def test_journal_article(load_bibtex_for_test):
 def test_in_proceedings(load_bibtex_for_test):
     ref = load_bibtex_for_test["inproceedings"][0]
     reference = in_proceedings(ref, None)
-    print(reference)
     reference_blessed = (
         "\n{:.paper}\n"
         "<span>How to properly cite media</span>{:.papertitle}  \n"
@@ -77,5 +76,18 @@ def test_in_proceedings(load_bibtex_for_test):
         "<span>Paper 2A12, 1st International Conference on BibTeX, University, Anytown, CA, "
         "May 2013</span>{:.journal}  \n"
         "<span>The files for this paper can be found at the following link</span>{:.comment}  \n"
+        )
+    assert reference == reference_blessed
+
+
+def test_phd_thesis(load_bibtex_for_test):
+    ref = load_bibtex_for_test["phdthesis"][0]
+    reference = phd_thesis(ref, None)
+    reference_blessed = (
+        "\n{:.paper}\n"
+        "<span>The worst sources of name generation</span>{:.papertitle}  \n"
+        "<span>F.A. Author</span>{:.authors}  \n"
+        "<span>College, Aug. 2014</span>{:.journal}  \n"
+        "<span>Files at the following link</span>{:.comment}  \n"
         )
     assert reference == reference_blessed
