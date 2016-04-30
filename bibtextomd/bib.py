@@ -16,6 +16,15 @@ except ImportError:
           "versions.")
     sys.exit(1)
 
+# Set the formatting identifiers. Since we're using kramdown, we
+# don't have to use the HTML tags.
+em = '_'
+strong = '**'
+
+# Set some HTML tags to go around each part of the reference.
+open_span = '<span>'
+close_span = '</span>'
+
 
 # First is to define a function to format the names we get from BibTeX,
 # since this task will be the same for every paper type.
@@ -131,6 +140,114 @@ def reorder(names, faname):
     return nameout
 
 
+def journal_article(ref, faname):
+    # Get the string of author names in the proper format from
+    # the `reorder` function. Get some other information. Hack
+    # the journal title to remove the '\' before '&' in
+    # 'Energy & Fuels' because Mendeley inserts an extra '\'
+    # into the BibTeX.
+    authors = reorder(ref["author"], faname)
+    title = ref["title"]
+    journal = ref["journal"]
+    if '\&' in journal:
+        words = journal.strip().split('\&')
+        journal = words[0] + '&' + words[1]
+
+    # Start building the string containing the formatted
+    # reference. Each bit should be surrounded by a span. The
+    # {:.XYZ} is the kramdown notation to add that class to the
+    # HTML tag. Each line should be ended with two spaces
+    # before the newline so that kramdown inserts an HTML <br>
+    # there.
+    reference = (
+        '\n{{:.paper}}\n{open}{title}{close}{{:.papertitle}}  \n'
+        '{open}{authors}{close}{{:.authors}}  \n'
+        '{open}{em}{journal}{em}, '.format(
+            open=open_span, close=close_span, title=title, authors=authors, em=em,
+            journal=journal,
+            )
+        )
+
+    # Not all journal articles will have vol., no., and pp.
+    # because some may be "In Press".
+    if "volume" in ref:
+        reference += 'vol. ' + ref["volume"] + ', '
+
+    if "number" in ref:
+        reference += 'no. ' + ref["number"] + ', '
+
+    if "pages" in ref:
+        reference += 'pp. ' + ref["pages"] + ', '
+
+    month = ref["month"].title()
+    year = ref["year"]
+    if month == "May":
+        month += ' '
+    else:
+        month += '. '
+
+    reference += (
+        '{month}{year}{close}{{:.journal}}  \n'.format(
+            month=month, year=year, close=close_span,
+            )
+        )
+
+    if "doi" in ref:
+        reference += (
+            '{open}{strong}DOI:{strong} [{doi}]'
+            '(http://dx.doi.org/{doi}){close}{{:.doi}}  \n'.format(
+                open=open_span, close=close_span, strong=strong,
+                doi=ref["doi"],
+                )
+            )
+
+    # Extra comments, such as links to files, should be stored
+    # as "Notes" for each reference in Mendeley. Mendeley will
+    # export this field with the tag "annote" in BibTeX.
+    if "annote" in ref:
+        reference += (
+            '{open}{annote}{close}{{:.comment}}  \n'.format(
+                open=open_span, close=close_span,
+                annote=ref["annote"].replace('\\', ''),
+                )
+            )
+    return reference
+
+
+def load_bibtex(bib_file_name):
+    # Open and parse the BibTeX file in `bib_file_name` using
+    # `bibtexparser`
+    with open(bib_file_name, 'r') as bib_file:
+        bp = BibTexParser(bib_file.read(), customization=convert_to_unicode)
+
+    # Get a dictionary of dictionaries of key, value pairs from the
+    # BibTeX file. The structure is
+    # {ID:{authors:...},ID:{authors:...}}.
+    refsdict = bp.get_entry_dict()
+
+    # Create a list of all the types of documents found in the BibTeX
+    # file, typically `article`, `inproceedings`, and `phdthesis`.
+    # Dedupe the list.
+    entry_types = []
+    for k, ref in refsdict.items():
+        entry_types.append(ref["ENTRYTYPE"])
+    entry_types = set(entry_types)
+
+    # For each of the types of reference, we need to sort each by month
+    # then year. We store the dictionary representing each reference in
+    # a sorted list for each type of reference. Then we store each of
+    # these sorted lists in a dictionary whose key is the type of
+    # reference and value is the list of dictionaries.
+    sort_dict = {}
+    for t in entry_types:
+        temp = sorted([val for key, val in refsdict.items()
+                      if val["ENTRYTYPE"] == t], key=lambda l:
+                      datetime.strptime(l["month"], '%b').month, reverse=True)
+        sort_dict[t] = sorted(temp, key=lambda k: k["year"], reverse=True)
+
+    return sort_dict
+
+
 def main(argv):
     arg_parser = argparse.ArgumentParser(
         description=(
@@ -161,45 +278,7 @@ def main(argv):
     output_file_name = args.output
     faname = args.author
 
-    # Set the formatting identifiers. Since we're using kramdown, we
-    # don't have to use the HTML tags.
-    em = '_'
-    strong = '**'
-
-    # Set some HTML tags to go around each part of the reference.
-    open_span = '<span>'
-    close_span = '</span>'
-
-    # Open and parse the BibTeX file in `bib_file_name` using
-    # `bibtexparser`
-
-    with open(bib_file_name, 'r') as bib_file:
-        bp = BibTexParser(bib_file.read(), customization=convert_to_unicode)
-
-    # Get a dictionary of dictionaries of key, value pairs from the
-    # BibTeX file. The structure is
-    # {ID:{authors:...},ID:{authors:...}}.
-    refsdict = bp.get_entry_dict()
-
-    # Create a list of all the types of documents found in the BibTeX
-    # file, typically `article`, `inproceedings`, and `phdthesis`.
-    # Dedupe the list.
-    entry_types = []
-    for k, ref in refsdict.items():
-        entry_types.append(ref["ENTRYTYPE"])
-    entry_types = set(entry_types)
-
-    # For each of the types of reference, we need to sort each by month
-    # then year. We store the dictionary representing each reference in
-    # a sorted list for each type of reference. Then we store each of
-    # these sorted lists in a dictionary whose key is the type of
-    # reference and value is the list of dictionaries.
-    sort_dict = {}
-    for t in entry_types:
-        temp = sorted([val for key, val in refsdict.items()
-                      if val["ENTRYTYPE"] == t], key=lambda l:
-                      datetime.strptime(l["month"], '%b').month, reverse=True)
-        sort_dict[t] = sorted(temp, key=lambda k: k["year"], reverse=True)
+    sort_dict = load_bibtex(bib_file_name)
 
     # Open the output file with utf-8 encoding, write mode, and Unix
     # newlines.
@@ -222,18 +301,6 @@ def main(argv):
         # to write out the logic for each loop instead of writing the
         # logic into a function and calling that.
         for ref in sort_dict["article"]:
-            # Get the string of author names in the proper format from
-            # the `reorder` function. Get some other information. Hack
-            # the journal title to remove the '\' before '&' in
-            # 'Energy & Fuels' because Mendeley inserts an extra '\'
-            # into the BibTeX.
-            authors = reorder(ref["author"], faname)
-            title = ref["title"]
-            journal = ref["journal"]
-            if '\&' in journal:
-                words = journal.strip().split('\&')
-                journal = words[0] + '&' + words[1]
-
             # Get the publication year. If the year of the current
             # reference is not equal to the year of the previous
             # reference, we need to print the year out and set
@@ -241,68 +308,11 @@ def main(argv):
             year = ref["year"]
             if year != pubyear:
                 pubyear = year
-                write_year = '\n{{:.year}}\n### {}\n'.format(year)
-                print(write_year)
-                out_file.write(write_year)
+            write_year = '\n{{:.year}}\n### {}\n'.format(year)
+            print(write_year)
+            out_file.write(write_year)
 
-            # Start building the string containing the formatted
-            # reference. Each bit should be surrounded by a span. The
-            # {:.XYZ} is the kramdown notation to add that class to the
-            # HTML tag. Each line should be ended with two spaces
-            # before the newline so that kramdown inserts an HTML <br>
-            # there.
-            reference = (
-                '\n{{:.paper}}\n{open}{title}{close}{{:.papertitle}}  \n'
-                '{open}{authors}{close}{{:.authors}}  \n'
-                '{open}{em}{journal}{em}, '.format(
-                    open=open_span, close=close_span, title=title, authors=authors, em=em,
-                    journal=journal,
-                    )
-                )
-
-            # Not all journal articles will have vol., no., and pp.
-            # because some may be "In Press".
-            if "volume" in ref:
-                reference += 'vol. ' + ref["volume"] + ', '
-
-            if "number" in ref:
-                reference += 'no. ' + ref["number"] + ', '
-
-            if "pages" in ref:
-                reference += 'pp. ' + ref["pages"] + ', '
-
-            month = ref["month"].title()
-            if month == "May":
-                month += ' '
-            else:
-                month += '. '
-
-            reference += (
-                '{month}{year}{close}{{:.journal}}  \n'.format(
-                    month=month, year=year, close=close_span,
-                    )
-                )
-
-            if "doi" in ref:
-                reference += (
-                    '{open}{strong}DOI:{strong} [{doi}]'
-                    '(http://dx.doi.org/{doi}){close}{{:.doi}}  \n'.format(
-                        open=open_span, close=close_span, strong=strong,
-                        doi=ref["doi"],
-                        )
-                    )
-
-            # Extra comments, such as links to files, should be stored
-            # as "Notes" for each reference in Mendeley. Mendeley will
-            # export this field with the tag "annote" in BibTeX.
-            if "annote" in ref:
-                reference += (
-                    '{open}{annote}{close}{{:.comment}}  \n'.format(
-                        open=open_span, close=close_span,
-                        annote=ref["annote"].replace('\\', ''),
-                        )
-                    )
-            print(reference)
+            reference = journal_article(ref, faname)
             out_file.write(reference)
 
         # Next are conference papers and posters. Print the header to
