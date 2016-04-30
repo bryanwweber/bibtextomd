@@ -15,6 +15,7 @@ except ImportError:
           "versions.")
     sys.exit(1)
 
+
 # First is to define a function to format the names we get from BibTeX,
 # since this task will be the same for every paper type. The current
 # format is "F.M. Last, F.M. Last, and F.M. Last".
@@ -110,7 +111,7 @@ def reorder(names, faname):
             i = tidynames.index(faname)
             tidynames[i] = my_name_format_tag + tidynames[i] + my_name_format_tag
         except ValueError:
-            print("Couldn't find ",faname,"in the names list. Sorry!")
+            print("Couldn't find ", faname, "in the names list. Sorry!")
 
     # Handle the various cases of number of authors and how they should
     # be joined. Convert the elements of `tidynames` to a string.
@@ -129,10 +130,12 @@ def reorder(names, faname):
     # Return `nameout`, the string of formatted authors
     return nameout
 
+
 def main(argv):
     arg_parser = argparse.ArgumentParser(
-        description=("Convert a BibTeX file to kramdown output with optional "
-        "author highlighting."),
+        description=(
+            "Convert a BibTeX file to kramdown output with optional author highlighting."
+            ),
         formatter_class=argparse.ArgumentDefaultsHelpFormatter,
         )
     arg_parser.add_argument(
@@ -147,7 +150,8 @@ def main(argv):
         default="pubs.md",
         type=str,
         )
-    arg_parser.add_argument("-a", "--author",
+    arg_parser.add_argument(
+        "-a", "--author",
         help="Set the name of the author to be highlighted.",
         type=str,
         )
@@ -173,7 +177,7 @@ def main(argv):
     # Open and parse the BibTeX file in `bib_file_name` using
     # `bibtexparser`
 
-    with open(bib_file_name,'r') as bib_file:
+    with open(bib_file_name, 'r') as bib_file:
         bp = BibTexParser(bib_file.read(), customization=convert_to_unicode)
 
     # Get a dictionary of dictionaries of key, value pairs from the
@@ -185,7 +189,7 @@ def main(argv):
     # file, typically `article`, `inproceedings`, and `phdthesis`.
     # Dedupe the list.
     types = []
-    for k,ref in refsdict.items():
+    for k, ref in refsdict.items():
         types.append(ref["type"])
     types = set(types)
 
@@ -198,7 +202,7 @@ def main(argv):
     for type in types:
         temp = sorted([val for key, val in refsdict.items()
                       if val["type"] == type], key=lambda l:
-                      datetime.strptime(l["month"],'%b').month, reverse=True)
+                      datetime.strptime(l["month"], '%b').month, reverse=True)
         sort_dict[type] = sorted(temp, key=lambda k: k["year"], reverse=True)
 
     # Open the output file with utf-8 encoding, write mode, and Unix
@@ -227,7 +231,7 @@ def main(argv):
             # the journal title to remove the '\' before '&' in
             # 'Energy & Fuels' because Mendeley inserts an extra '\'
             # into the BibTeX.
-            authors = reorder(ref["author"],faname)
+            authors = reorder(ref["author"], faname)
             title = ref["title"]
             journal = ref["journal"]
             if '\&' in journal:
@@ -254,10 +258,10 @@ def main(argv):
             reference = (
                 '\n{{:.paper}}\n{open}{title}{close}{{:.papertitle}}  \n'
                 '{open}{authors}{close}{{:.authors}}  \n'
-                '{open}{em}{journal}{em}, '.format(open=open_span,
-                close=close_span, title=title, authors=authors, em=em,
-                journal=journal,
-                )
+                '{open}{em}{journal}{em}, '.format(
+                    open=open_span, close=close_span, title=title, authors=authors, em=em,
+                    journal=journal,
+                    )
                 )
 
             # Not all journal articles will have vol., no., and pp.
@@ -279,17 +283,17 @@ def main(argv):
 
             reference += (
                 '{month}{year}{close}{{:.journal}}  \n'.format(
-                month=month, year=year, close=close_span,
-                )
+                    month=month, year=year, close=close_span,
+                    )
                 )
 
             if "doi" in ref:
                 reference += (
                     '{open}{strong}DOI:{strong} [{doi}]'
                     '(http://dx.doi.org/{doi}){close}{{:.doi}}  \n'.format(
-                    open=open_span, close=close_span, strong=strong,
-                    doi=ref["doi"],
-                    )
+                        open=open_span, close=close_span, strong=strong,
+                        doi=ref["doi"],
+                        )
                     )
 
             # Extra comments, such as links to files, should be stored
@@ -298,9 +302,9 @@ def main(argv):
             if "annote" in ref:
                 reference += (
                     '{open}{annote}{close}{{:.comment}}  \n'.format(
-                    open=open_span, close=close_span,
-                    annote=ref["annote"].replace('\\',''),
-                    )
+                        open=open_span, close=close_span,
+                        annote=ref["annote"].replace('\\', ''),
+                        )
                     )
             print(reference)
             out_file.write(reference)
@@ -315,7 +319,7 @@ def main(argv):
 
         # Loop through the references in the `inproceedings` type.
         for ref in sort_dict["inproceedings"]:
-            authors = reorder(ref["author"],faname)
+            authors = reorder(ref["author"], faname)
             title = ref["title"]
             year = ref["year"]
             if year != pubyear:
@@ -328,9 +332,9 @@ def main(argv):
             reference = (
                 '\n{{:.paper}}\n{open}{title}{close}{{:.papertitle}}  \n'
                 '{open}{authors}{close}{{:.authors}}  \n'
-                '{open}'.format(open=open_span, close=close_span, title=title,
-                authors=authors,
-                )
+                '{open}'.format(
+                    open=open_span, close=close_span, title=title, authors=authors,
+                    )
                 )
 
             # Since Mendeley doesn't allow customization of BibTeX
@@ -358,17 +362,17 @@ def main(argv):
 
             reference += (
                 '{month}{year}{close}{{:.journal}}  \n'.format(
-                month=month, year=year, close=close_span,
-                )
+                    month=month, year=year, close=close_span,
+                    )
                 )
 
             if "doi" in ref:
                 reference += (
                     '{open}{strong}DOI:{strong} [{doi}]'
                     '(http://dx.doi.org/{doi}){close}{{:.doi}}  \n'.format(
-                    open=open_span, strong=strong, doi=ref["doi"],
-                    close=close_span,
-                    )
+                        open=open_span, strong=strong, doi=ref["doi"],
+                        close=close_span,
+                        )
                     )
 
             # Extra comments, such as links to files, should be stored
@@ -377,9 +381,9 @@ def main(argv):
             if "annote" in ref:
                 reference += (
                     '{open}{annote}{close}{{:.comment}}  \n'.format(
-                    open=open_span, annote=ref["annote"].replace('\\',''),
-                    close=close_span,
-                    )
+                        open=open_span, annote=ref["annote"].replace('\\', ''),
+                        close=close_span,
+                        )
                     )
             print(reference)
             out_file.write(reference)
@@ -388,7 +392,7 @@ def main(argv):
         # as for the other reference types.
         pubyear = '2200'
         for ref in sort_dict["phdthesis"]:
-            authors = reorder(ref["author"],faname)
+            authors = reorder(ref["author"], faname)
             title = ref["title"]
             year = ref["year"]
             if year != pubyear:
@@ -398,9 +402,9 @@ def main(argv):
             reference = (
                 '\n{{:.paper}}\n{open}{title}{close}{{:.papertitle}}  \n'
                 '{open}{authors}{close}{{:.authors}}  \n'
-                '{open}'.format(open=open_span, close=close_span, title=title,
-                authors=authors,
-                )
+                '{open}'.format(
+                    open=open_span, close=close_span, title=title, authors=authors,
+                    )
                 )
             if "school" in ref:
                 reference += ref["school"] + ', '
@@ -417,9 +421,9 @@ def main(argv):
             if "annote" in ref:
                 reference += (
                     '{open}{annote}{close}{{:.comment}}  \n'.format(
-                    open=open_span, annote=ref["annote"].replace('\\',''),
-                    close=close_span,
-                    )
+                        open=open_span, annote=ref["annote"].replace('\\', ''),
+                        close=close_span,
+                        )
                     )
 
             # Here we have some me-specific customization, where my
