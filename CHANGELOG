@@ -6,7 +6,7 @@
 # BibTeX file is expected to be from Mendeley, although Mendeley follows
 # the standard conventions pretty well, so most BibTeX files should
 # work. bibtextomd is Python 3 ONLY!
-# 
+#
 # v. 0.1.0 - initial release
 # v. 0.1.1 - Fix escape character bug in annote field. Add help output
 #            with option -h. 14-OCT-2013
@@ -32,4 +32,6 @@
 # v. 0.3.0 - Switch to argparse instead of getopt for command line
 #            option parsing. Clean up whitespace at end of lines.
 #            28-JUN-2014
+# v. 0.4.0 - Major rewrite to make it a package and update the code.
+#            30-APR-2016
 #######################################################################

@@ -1,6 +1,6 @@
 The MIT License (MIT)
 
-Copyright (c) 2014 Bryan W. Weber
+Copyright (c) 2016 Bryan W. Weber
 
 Permission is hereby granted, free of charge, to any person obtaining a copy of
 this software and associated documentation files (the "Software"), to deal in
