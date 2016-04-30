@@ -11,7 +11,7 @@ try:
 except ImportError:
     print("We need the BibTeX parser from the bibtexparser package on PyPI. "
           "If pip is installed, `pip install bibtexparser` will install the "
-          "package. Code is tested with version 0.4, may not work with other "
+          "package. Code is tested with version 0.6.2, may not work with other "
           "versions.")
     sys.exit(1)
 
@@ -31,7 +31,6 @@ def reorder(names, faname):
              style here.
     faname -- string of the initialized name of the author to whom
               formatting will be applied
-              default: 'F.A. Author'
     OUTPUT:
     nameout -- string of formatted names.
 
@@ -188,10 +187,10 @@ def main(argv):
     # Create a list of all the types of documents found in the BibTeX
     # file, typically `article`, `inproceedings`, and `phdthesis`.
     # Dedupe the list.
-    types = []
+    entry_types = []
     for k, ref in refsdict.items():
-        types.append(ref["type"])
-    types = set(types)
+        entry_types.append(ref["ENTRYTYPE"])
+    entry_types = set(entry_types)
 
     # For each of the types of reference, we need to sort each by month
     # then year. We store the dictionary representing each reference in
@@ -199,11 +198,11 @@ def main(argv):
     # these sorted lists in a dictionary whose key is the type of
     # reference and value is the list of dictionaries.
     sort_dict = {}
-    for type in types:
+    for t in entry_types:
         temp = sorted([val for key, val in refsdict.items()
-                      if val["type"] == type], key=lambda l:
+                      if val["ENTRYTYPE"] == t], key=lambda l:
                       datetime.strptime(l["month"], '%b').month, reverse=True)
-        sort_dict[type] = sorted(temp, key=lambda k: k["year"], reverse=True)
+        sort_dict[t] = sorted(temp, key=lambda k: k["year"], reverse=True)
 
     # Open the output file with utf-8 encoding, write mode, and Unix
     # newlines.
@@ -429,14 +428,14 @@ def main(argv):
             # Here we have some me-specific customization, where my
             # Ph.D. dissertation and Master's thesis are picked out
             # of the reference list specifically.
-            if ref["id"] == "Weber2014a":
+            if ref["ID"] == "Weber2014a":
                 print("Ph.D. Dissertation\n---\n\n")
                 out_file.write("\nPh.D. Dissertation\n---\n\n")
                 print(write_year)
                 out_file.write(write_year)
                 print(reference)
                 out_file.write(reference)
-            elif ref["id"] == "Weber2010":
+            elif ref["ID"] == "Author2010":
                 print("Master's Thesis\n---\n\n")
                 out_file.write("\nMaster's Thesis\n---\n\n")
                 print(write_year)
