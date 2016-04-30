@@ -372,7 +372,7 @@ def main(argv):
         type=str,
         )
 
-    args = arg_parser.parse_args()
+    args = arg_parser.parse_args(argv)
     bib_file_name = args.bibfile
     output_file_name = args.output
     faname = args.author
