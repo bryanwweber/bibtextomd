@@ -49,7 +49,7 @@ def test_hyphenated_name():
 
 
 def test_empty_name():
-    names = 'Name, First A. and  and Name, Second, A.'
+    names = 'Name, First A. and and Name, Second, A.'
     n = reorder(names, None)
     assert n == 'F.A. Name and S.A. Name'
 
