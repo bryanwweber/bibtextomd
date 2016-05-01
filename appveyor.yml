@@ -51,5 +51,7 @@ install:
   # Install the project so it can be tested
   - "python setup.py develop"
 
+build: false
+
 test_script:
   - "py.test"
