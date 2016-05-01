@@ -1,6 +1,7 @@
 BibTeX to markdown formatter
 ---
 [![Build Status](https://travis-ci.org/bryanwweber/bibtextomd.svg?branch=master)](https://travis-ci.org/bryanwweber/bibtextomd)
+[![Build status](https://ci.appveyor.com/api/projects/status/cg6ok4si2d38jr86?svg=true)](https://ci.appveyor.com/project/bryanwweber/bibtextomd)
 [![Coverage Status](https://coveralls.io/repos/github/bryanwweber/bibtextomd/badge.svg?branch=master)](https://coveralls.io/github/bryanwweber/bibtextomd?branch=master)
 
 This Python script takes a BibTeX bibliography file and converts the
