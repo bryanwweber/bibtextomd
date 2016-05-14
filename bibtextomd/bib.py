@@ -1,7 +1,6 @@
 #! /usr/bin/python3
 # System imports
 from datetime import datetime
-import sys
 import argparse
 import warnings
 
