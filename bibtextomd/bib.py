@@ -43,8 +43,8 @@ def reorder(names, faname):
     my_name_format_tag = '**'
 
     # Convert the input string to a list by splitting the string at the
-    # " and " and strip out any remaining whitespace.
-    nameslist = [i.strip() for i in names.replace('\n', ' ').split("and")]
+    # "and " and strip out any remaining whitespace.
+    nameslist = [i.strip() for i in names.replace('\n', ' ').split("and ")]
 
     # Initialize a list to store the names after they've been tidied
     # up.

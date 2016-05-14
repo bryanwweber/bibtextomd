@@ -36,6 +36,12 @@ def test_missing_name():
         reorder(names, 'Missing Author')
 
 
+def test_and_in_name():
+    names = 'Cooler, Brandywine W.'
+    n = reorder(names, None)
+    assert n == 'B.W. Cooler'
+
+
 def test_no_highlighted_name():
     names = 'Author, First A.'
     n = reorder(names, None)
