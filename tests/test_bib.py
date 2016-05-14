@@ -78,7 +78,10 @@ def load_bibtex_for_test():
 
 
 def test_journal_article(load_bibtex_for_test):
-    ref = load_bibtex_for_test["article"][0]
+    articles = load_bibtex_for_test["article"]
+    for a in articles:
+        if a['ID'] == 'Author2013':
+            ref = a
     reference = journal_article(ref, None)
     reference_blessed = (
         "\n{:.paper}\n"
@@ -92,7 +95,10 @@ def test_journal_article(load_bibtex_for_test):
 
 
 def test_journal_article_2(load_bibtex_for_test):
-    ref = load_bibtex_for_test["article"][1]
+    articles = load_bibtex_for_test["article"]
+    for a in articles:
+        if a['ID'] == 'Author2011':
+            ref = a
     reference = journal_article(ref, None)
     reference_blessed = (
         "\n{:.paper}\n"
