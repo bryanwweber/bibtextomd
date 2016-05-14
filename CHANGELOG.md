@@ -1,3 +1,10 @@
+<a name="v0.4.2"></a>
+# v0.4.2 (14-MAY-2016)
+
+- Fix printing the same year mulitple times
+- Fix "and" in the middle of names
+- Remove "me-specific" customization
+
 <a name="v0.4.1"></a>
 # v0.4.1 (01-MAY-2016)
 
