@@ -64,12 +64,3 @@ Master's Thesis
 <span>F.A. Author</span>{:.authors}  
 <span>University, May 2010</span>{:.journal}  
 <span>Files at the following link</span>{:.comment}  
-
-{:.year}
-### 2008
-
-{:.paper}
-<span>The worst sources of name generation</span>{:.papertitle}  
-<span>F.A. Author</span>{:.authors}  
-<span>College, Jan. 2008</span>{:.journal}  
-<span>Files at the following link</span>{:.comment}  
