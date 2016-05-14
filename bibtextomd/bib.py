@@ -419,18 +419,5 @@ def main(argv):
 
             reference = phd_thesis(ref, faname)
 
-            # Here we have some me-specific customization, where my
-            # Ph.D. dissertation and Master's thesis are picked out
-            # of the reference list specifically.
-            if ref["ID"] == "Author2014":
-                out_file.write("\nPh.D. Dissertation\n---\n\n")
-                out_file.write(write_year)
-                out_file.write(reference)
-            elif ref["ID"] == "Author2010":
-                out_file.write("\nMaster's Thesis\n---\n\n")
-                out_file.write(write_year)
-                out_file.write(reference)
-            else:
-                out_file.write("\n")
                 out_file.write(write_year)
                 out_file.write(reference)
