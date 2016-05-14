@@ -262,7 +262,7 @@ def in_proceedings(ref, faname):
     return reference
 
 
-def phd_thesis(ref, faname):
+def thesis(ref, faname):
     authors = reorder(ref["author"], faname)
     title = ref["title"]
     year = ref["year"]
@@ -412,12 +412,22 @@ def main(argv):
         # as for the other reference types.
         pubyear = ''
         for ref in sort_dict["phdthesis"]:
+            out_file.write("\nPh.D. Dissertation\n---\n\n")
             year = ref["year"]
             if year != pubyear:
                 pubyear = year
                 write_year = '{{:.year}}\n### {}\n'.format(year)
-
-            reference = phd_thesis(ref, faname)
-
                 out_file.write(write_year)
-                out_file.write(reference)
+
+            out_file.write(thesis(ref, faname))
+
+        pubyear = ''
+        for ref in sort_dict["mastersthesis"]:
+            out_file.write("\nMaster's Thesis\n---\n\n")
+            year = ref["year"]
+            if year != pubyear:
+                pubyear = year
+                write_year = '{{:.year}}\n### {}\n'.format(year)
+                out_file.write(write_year)
+
+            out_file.write(thesis(ref, faname))

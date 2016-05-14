@@ -3,7 +3,7 @@ Testing module for bib.py
 """
 import os
 import pytest
-from bibtextomd.bib import main, reorder, load_bibtex, journal_article, in_proceedings, phd_thesis
+from bibtextomd.bib import main, reorder, load_bibtex, journal_article, in_proceedings, thesis
 
 
 def test_single_author_good():
@@ -136,9 +136,9 @@ def test_in_proceedings_2(load_bibtex_for_test):
     assert reference == reference_blessed
 
 
-def test_phd_thesis(load_bibtex_for_test):
+def test_thesis(load_bibtex_for_test):
     ref = load_bibtex_for_test["phdthesis"][0]
-    reference = phd_thesis(ref, None)
+    reference = thesis(ref, None)
     reference_blessed = (
         "\n{:.paper}\n"
         "<span>The worst sources of name generation</span>{:.papertitle}  \n"
