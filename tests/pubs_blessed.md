@@ -10,6 +10,12 @@ Journal Articles
 <span>_Journal Of Made Up Names & Words_, Aug. 2013</span>{:.journal}  
 <span>**DOI:** [10.0000/made-up-doi](https://dx.doi.org/10.0000/made-up-doi)</span>{:.doi}  
 
+{:.paper}
+<span>A study of the best ways to make up a name, Part 2: The Naming</span>{:.papertitle}  
+<span>F.A. Author, S.B. Sécond, and T.C. Third</span>{:.authors}  
+<span>_Journal Of Made Up Names & Words_, May 2013</span>{:.journal}  
+<span>**DOI:** [10.0000/made-up-doi](https://dx.doi.org/10.0000/made-up-doi)</span>{:.doi}  
+
 {:.year}
 ### 2011
 
