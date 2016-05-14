@@ -390,8 +390,7 @@ def main(argv):
             write_year = '\n{{:.year}}\n### {}\n'.format(year)
             out_file.write(write_year)
 
-            reference = journal_article(ref, faname)
-            out_file.write(reference)
+            out_file.write(journal_article(ref, faname))
 
         # Next are conference papers and posters.
         out_file.write('\nConference Publications and Posters\n---\n')
@@ -407,8 +406,7 @@ def main(argv):
                 write_year = '\n{{:.year}}\n### {}\n'.format(year)
                 out_file.write(write_year)
 
-            reference = in_proceedings(ref, faname)
-            out_file.write(reference)
+            out_file.write(in_proceedings(ref, faname))
 
         # Finally are the theses and dissertations. Same general logic
         # as for the other reference types.
